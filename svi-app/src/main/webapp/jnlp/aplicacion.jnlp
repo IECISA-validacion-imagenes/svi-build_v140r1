@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://172.25.25.58/expedientes_iecisa/" href="jnlp/aplicacion.jnlp">
+  <information>
+    <title>Aplicacion Digitalizacion</title>
+    <vendor>Teclo Mexicana S.A. de C.V.</vendor>
+    <homepage href="http://teclomexicana.mx" />
+    <description>Aplicacion Digitalizacion</description>
+    <shortcut online="true" />
+    <shortcut online="true" install="true">
+      <desktop />
+      <menu submenu="Aplicacion Digitalizacion" />
+    </shortcut>
+    <offline-allowed />
+  </information>
+  <security>
+    <all-permissions />
+  </security>
+  <update check="background" policy="prompt-update" />
+  <resources arch="x86">
+    <j2se version="1.7+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="32m" max-heap-size="128m" java-vm-args="-ea" />
+    <jar href="jnlp/jar/svi-app-1.0.0.jar" main="true" />
+    <property name="jnlp.packEnabled" value="true" />
+  </resources>
+  <resources arch="amd64">
+    <j2se version="1.7+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="32m" max-heap-size="128m" java-vm-args="-ea" />
+    <jar href="jnlp/jar/svi-app-1.0.0.jar" main="true" />
+    <property name="jnlp.packEnabled" value="true" />
+  </resources>
+  <application-desc name="Digitalizacion" main-class="mx.com.teclo.main.MainFrame">
+    <argument>ADMINISTRADOR</argument>
+    <argument>2</argument>
+    <argument>http://172.25.25.58/iecisacdmxvexpediente_v110r1_prod_services/</argument>
+    <argument>http://172.25.25.58/expedientes_iecisa/</argument>
+  </application-desc>
+</jnlp>
+

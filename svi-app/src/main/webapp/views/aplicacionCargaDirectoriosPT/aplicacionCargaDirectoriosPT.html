@@ -1,0 +1,67 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	
+	<style>
+        .cover-app {
+            position: relative;
+        }
+        .cover-app img {
+            width: 100%;
+        }
+        .cover-app button {
+            position: absolute;
+            right: 10%;
+            bottom: 5%;
+        }
+    </style>
+</head>
+<body>
+        <div ng-show="error" class="alert alert-warning">
+            {{error.message}}
+        </div>
+        
+        <section class="content-header">
+            <h1>Digitalización y Procesamiento</h1>
+            <ol class="breadcrumb">
+                <li><a><i class="fa fa-book"></i>Digitalización</a></li>
+                <li class="active">Digitalización y Procesamiento</li>
+            </ol>
+        </section>
+
+        <section class="content">
+                <form role="form" name="form" novalidate>
+                    <div class="row centerBox">
+                        <div class="col-xs-12 col-md-8">
+                            <div class="box box-danger">
+                                <div class="box-header with-border text-center">
+                                    <h3 class="box-title">Aplicación de Carga de Directorios PT</h3>
+                                    
+                                    <div class="box-tools pull-right">
+                                        <button id="x" type="button" class="btn btn-box-tool"
+                                            data-widget="collapse">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    
+                                    <div class="row">
+                                       <div class="col-md-12 cover-app">
+			                                <img src="static/dist/img/coverapptmp.png" />
+			                                <button class="btn btn-danger" ng-click="crearArchivo()">
+			                                    Iniciar aplicación <i class="fa fa-arrow-right"></i>
+			                                </button>
+			                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </form>
+            </section>
+</body>
+</html>

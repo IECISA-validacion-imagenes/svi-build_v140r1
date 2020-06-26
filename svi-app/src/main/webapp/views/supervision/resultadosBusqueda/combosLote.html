@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-5 col-md-offset-1">
+        <div class="form-group"
+            ng-class="{'has-error': formConsultaExpediente.comboEtiqueta.$error.required && formConsultaExpediente.comboEtiqueta.$dirty}">
+            <label for="comboEtiqueta">Motivo de Revalidaci&oacute;n:</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-list"></i>
+                </div>
+                <select class="form-control" id="comboMotivoRevalidaRapida" name="comboMotivoRevalidaRapida"
+                    data-minimum-results-for-search="Infinity" select2 idioma-s2="{{currentLanguage}}"
+                    ng-required="true" ng-options="motivo.nameCat for motivo in catMotivoGeneral.lista"
+                    ng-model="catMotivoGeneral.valor">
+                    <option value="" selected="selected">Seleccione</option>
+                </select>
+            </div>
+            <div ng-show="formConsultaExpediente.comboEtiqueta.$error.required && formConsultaExpediente.comboMarca.$dirty"
+                ng-style="{color:'red'}">La marca es requerida</div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="form-group"
+            ng-class="{'has-error': formConsultaExpediente.comboEtiqueta.$error.required && formConsultaExpediente.comboEtiqueta.$dirty}">
+            <label for="comboEtiqueta">*Descripci&oacute;n de Revalidaci&oacute;n:</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-list"></i>
+                </div>
+                <select class="form-control" id="comboDescripción de ReasignaciónRevalidaRapida"
+                    name="comboMotivoRevalidaRapida" data-minimum-results-for-search="Infinity" select2
+                    idioma-s2="{{currentLanguage}}" ng-required="true"
+                    ng-options="motivo.nameCat for motivo in catMotivoDetalle.lista" 
+                    ng-model="catMotivoDetalle.valor">
+                    <option value="" selected="selected">Seleccione</option>
+                </select>
+            </div>
+            <div ng-show="formConsultaExpediente.comboEtiqueta.$error.required && formConsultaExpediente.comboMarca.$dirty"
+                ng-style="{color:'red'}">La marca es requerida</div>
+        </div>
+    </div>
+</div>

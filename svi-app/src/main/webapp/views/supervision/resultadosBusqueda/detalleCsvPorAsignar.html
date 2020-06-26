@@ -1,0 +1,101 @@
+<div class="row"
+	ng-if="dataRegistros.length >0 && detalleAsignacion.idPtCsv>0">
+		<div class="col-md-10 col-md-offset-1">
+		<div class="box box-danger">
+			<div class="box-header row">
+				<div class="col-md-6 col-xs-12">
+					<h3 class="box-title">Resultados encontrados: {{
+						(dataRegistros | filter : view.searchSomething).length }}</h3>
+				</div>
+				<div class="col-md-offset-3 col-md-3 col-xs-10">
+					<div class="input-group pull-right">
+						<input type="text" id="searchsomething" class="form-control"
+							placeholder="Buscar por filtro" ng-model="view.searchSomething">
+						<div class="input-group-addon">
+							<i class="fa fa-search"></i>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div class="box-body table-responsive">
+					
+				<table id="tblDetalleCsvNoAsign"
+					class="table table-striped table-hover header-fixed">
+					<thead>
+						<tr>
+							<th align="center" sort order="'nuCarril'" by="order"
+								reverse="reverse" width="5%">CARRIL</th>
+							<th align="center" sort order="'nuExpediente'" by="order"
+								reverse="reverse" width="21%">NO. EXPEDIENTE</th>
+							<th align="center" sort order="'cdPlacaDelantera'" by="order"
+								reverse="reverse" width="7%">PLACA DELANTERA</th>
+							<th align="center" sort order="'cdEntidadDelantera'" by="order"
+								reverse="reverse" width="10%">ENTIDAD DELANTERA</th>
+							<th align="center" sort order="'cdPlacaTrasera'" by="order"
+								reverse="reverse" width="7%">PLACA TRASERA</th>
+							<th align="center" sort order="'cdEntidadTrasera'" by="order"
+								reverse="reverse" width="10%">ENTIDAD TRASERA</th>
+							<th align="center" sort order="'cdPerfil'" by="order"
+								reverse="reverse" width="13%">PERFIL</th>
+							<th align="center" sort order="'cdClasificacion'" by="order"
+								reverse="reverse" width="10%">CLASIF. EXPEDIENTE</th>
+							<th align="center" sort order="'stInconsistencia'" by="order"
+								reverse="reverse" width="7%">CON INCIDENCIA</th>
+							<th align="center" width="10%"><input type="checkbox"
+								ng-change="checkAllDetalleArchivos(allCheck)"
+								ng-model="allCheck" class="icheckbox_flat-green" /></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							dir-paginate="csv in dataRegistros | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage"
+							pagination-id="detalleNoAsignadoCsv">
+							<td class="center" width="5%">{{ csv.nuCarril }}</td>
+							<td class="center" width="21%">{{ csv.nuExpediente }}</td>
+							<td class="center" width="7%">{{ csv.cdPlacaDelantera }}</td>
+							<td class="center" width="10%">{{ csv.cdEntidadDelantera }}</td>
+							<td class="center" width="7%">{{ csv.cdPlacaTrasera }}</td>
+							<td class="center" width="10%">{{ csv.cdEntidadTrasera }}</td>
+							<td class="center" width="13%">{{ csv.cdPerfil }}</td>
+							<td class="center" width="10%">{{ csv.cdClasificacion }}</td>
+							<td class="center" width="7%">{{ csv.stInconsistencia == 1?
+								'S&iacute;': 'No' }}</td>
+							<td class="center" width="10%"><input type="checkbox"
+								ng-change="checkDetalleArchivos(csv.idRegistroCsv, csv.stPreseleccion)"
+								ng-model="csv.stPreseleccion" class="icheckbox_flat-green" /></td>
+						</tr>
+						<tr
+							ng-if="(dataRegistros| filter:view.searchSomething).length < 1">
+							<td colspan="10" class="text-center">
+								<h4>No se encontraron coincidencias</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="container-fluid">
+				<div class="fixed-table-pagination" style="display: block;">
+					<rows-per-page rows="view.rowsPerPage"
+						filtro="view.searchSomething" array="dataRegistros">
+					</rows-per-page>
+					<div class="pull-right pagination">
+						<dir-pagination-controls class="pagination"
+							pagination-id="detalleNoAsignadoCsv"> </dir-pagination-controls>
+					</div>
+				</div>
+			</div>
+
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-12 center">
+						<button type="button" ng-click="revalidar('revalDetalleCSV')" class="btn btn-danger btn-flat">Agregar a Revalidación</button>
+					</div>
+				</div>
+			</div>	
+
+		</div>
+	</div>
+</div>

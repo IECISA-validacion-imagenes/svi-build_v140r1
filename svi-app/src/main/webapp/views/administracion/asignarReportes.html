@@ -1,0 +1,120 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Reportes</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Asignación de Reportes</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Asignación de Reportes</a></li>
+			<li class="active">Asignar Perfiles</li>
+		</ol>
+	</section>
+
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<div align="center">
+							<h3 class="box-title">Asignación de reportes a perfiles</h3>
+						</div>
+					</div>
+				 
+	       <div class="box-body">						
+				      <div class="row">
+							<div class="col-md-12 text-center">
+								<span style="font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+									 ng-show="showReporte">Reporte:<h3><strong>{{nbReporte}}</strong></h3>
+								</span> 
+							</div>
+							
+<br><br>
+
+<section class="content">
+	 <div class="col-xs-6">
+		<div class="box-body table-responsive">
+		  <table class="table table-hover header-fixed">
+				<thead>
+				   <tr>
+					 <th class="center wrap-text">REPORTES</th>
+	     		  </tr>
+			    </thead>
+			  
+		 <tbody>
+			<tr dir-paginate="r in edition.reportes | itemsPerPage: view.rowsPerPage1" 
+			    ng-click="setReporte(r.idReporte, r.nbReporte)" 
+			    ng-class="{'bg-success': r.idReporte === reporte}">
+     			<td align="justify">{{r.nbReporte}}</td>
+			</tr>
+		</tbody>
+     </table>
+   </div>
+ </div>
+ <!-- -final tabla de reportes, con paginación -->
+ 
+<!-- -Inicio tabla perfiles con paginación -->  
+	 <div class="col-xs-6">
+		<div class=" table-responsive">
+		  <table class="table table-hover header-fixed">
+				<thead>
+				   <tr>
+					 <th style="width:25%"> 
+					    <input type="checkbox" 
+					           ng-model="allPerfiles" 
+					           ng-change="toogleAllPerfiles()" 
+					           ng-disabled="reporte==undefined || reporte==null || reporte==''">
+						<label align="center">TODOS</label>
+					 </th>
+					<th style="width:75%" class="text-center">PERFILES</th>
+	     		  </tr>
+			    </thead>		  
+		 <tbody>
+		   <tr dir-paginate="p in edition.perfiles | itemsPerPage: vm.rowsPerPageVal" pagination-id="cust1"> 
+			 <td style="width:25%">
+			   <input type="checkbox"  
+			          ng-model="p.checked"
+			  		  ng-change="marcarDesmarcarPerfil('P',p.perfilId)" 
+			  		  ng-disabled="reporte==undefined || reporte==null || reporte==''" >
+			 </td>
+			 
+			<td style="width:75%">
+			     {{p.nbPerfil}}
+			</td>
+		   </tr>		
+		 </tbody>
+		</table>
+      </div>
+      
+<!--       <div class="fixed-table-pagination" style="display: block;"> -->
+<!-- 		 <rows-per-page rows="vm.rowsPerPageVal" array="edition.perfiles"></rows-per-page> -->
+<!-- 			<div class="pull-right pagination"> -->
+<!--  	    <dir-pagination-controls pagination-id="cust1"></dir-pagination-controls>  -->
+ 	    
+ 	    
+<!--        <div class="container-fluid"> -->
+<!-- 		<div class="fixed-table-pagination" style="display: block;"> -->
+<!-- 		  <rows-per-page rows="view.rowsPerPage2" array="edition.perfiles"></rows-per-page> -->
+<!-- 			<div class="pull-right pagination"> -->
+<!-- 				<dir-pagination-controls class="pagination" id="aaaa" ></dir-pagination-controls> -->
+<!-- 			</div> -->
+<!-- 		 </div> -->
+<!--       </div> -->
+     </div>
+ 
+ </section>
+ </div>
+ </div>
+
+<!-- Botones con acciones al final de la pagina  --> 
+<div class="box-footer">
+  <div class="row text-center">
+	<div class="col-md-12 text-center">
+	   <button type="button" class="btn btn-danger" ng-click="guardar()">Guardar</button>
+	   <button type="button" class="btn btn-danger" ng-click="revertir()">Cancelar</button>
+	</div>
+  </div>
+</div><!-- Footer Botenes de accion -->
+ </div>
+</body>
+</html>

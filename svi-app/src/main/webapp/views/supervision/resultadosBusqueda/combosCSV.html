@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-4 center">
+        <div class="form-group"
+            ng-class="{'has-error': formRevalidaRapidaInformacion.comboMotivoRevalidaRapida.$error.required && formRevalidaRapidaInformacion.comboMotivoRevalidaRapida.$dirty}">
+            <label for="comboMotivoRevalidaRapida">*Motivo de Revalidaci&oacute;n CSV:</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-list"></i>
+                </div>
+                <select class="form-control" id="comboMotivoRevalidaRapida" name="comboMotivoRevalidaRapida"
+                    data-minimum-results-for-search="Infinity" select2 idioma-s2="{{currentLanguage}}"
+                    ng-required="true" ng-options="motivo.nameCat for motivo in catMotivoGeneral.lista"
+                    ng-model="catMotivoGeneral.valor">
+                    <option value="" selected="selected">Seleccione</option>
+                </select>
+            </div>
+        </div>
+    </div>
+            <div class="col-md-4 center">
+                <div class="form-group"
+                    ng-class="{'has-error': formRevalidaRapidaInformacion.comboMotivoDetalleRevalidaRapida.$error.required && formRevalidaRapidaInformacion.comboMotivoDetalleRevalidaRapida.$dirty}">
+                    <label for="comboMotivoDetalleRevalidaRapida">*Motivo de Revalidaci&oacute;n Expedientes:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-list"></i>
+                        </div>
+                        <select class="form-control" id="comboMotivoDetalleRevalidaRapida" name="comboMotivoDetalleRevalidaRapida"
+                            data-minimum-results-for-search="Infinity" select2 idioma-s2="{{currentLanguage}}"
+                            ng-required="true" ng-options="motivo.nameCat for motivo in catMotivoDetalle.lista"
+                            ng-model="catMotivoDetalle.valor">
+                            <option value="" selected="selected">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+    
+    <div class="col-md-4 center">
+        <div class="form-group"
+            ng-class="{'has-error': formRevalidaRapidaInformacion.comboRevalidaValidadorRapida.$error.required && formRevalidaRapidaInformacion.comboRevalidaValidadorRapida.$dirty}">
+            <label for="comboRevalidaValidadorRapida">*Validador:</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-list"></i>
+                </div> 
+                <select class="form-control" id="comboRevalidaValidadorRapida"
+                    name="comboRevalidaValidadorRapida" select2 idioma-s2="{{currentLanguage}}"
+                    ng-required="true"
+                    ng-options="validador.nbValidador for validador in validadores.lista"
+                    ng-model="validadores.valor">
+                    <option value="" selected="selected">Seleccione</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,149 @@
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>{{breadCrumbs.servicio}}</h1>
+		<ol class="breadcrumb">
+			<li><a> <i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}
+			</a></li>
+			<li class="active">{{breadCrumbs.servicio}}</li>
+		</ol>
+	</section>
+	<section class="content">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Búsqueda</h3>
+					</div>
+					<div class="box-body">
+						<form role="form" name="formConsultaAsignacion" ng-submit="consultarAsignaciones(tipoBusq.valor)" novalidate>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="comboBusquedaAsignacion">*Tipo Búsqueda:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<select class="form-control" id="comboBusquedaAsignacion" name="comboBusquedaAsignacion"
+													data-minimum-results-for-search="Infinity" select2
+													idioma-s2="{{currentLanguage}}" ng-required="true"
+													ng-change="busquedaVO.busca = ''"
+													ng-options="cat.nameCat for cat in tipoBusq.lista"
+													ng-model="tipoBusq.valor">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': formConsultaAsignacion.inputBusquedaAsignacion.$error.required && formConsultaAsignacion.inputBusquedaAsignacion.$dirty}">
+										<label for="inputBusquedaAsignacion">*Valor:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input class="form-control" id="inputBusquedaAsignacion" name="inputBusquedaAsignacion" ng-model="busquedaVO.busca" ng-required="tipoBusq.valor.idCat != 1" ng-disabled="tipoBusq.valor.idCat == 1"/>
+											<span class="input-group-btn">
+												<button type="submit" class="btn btn-danger btn-flat" >{{ 'APP.Base.boton.buscar' |translate}}</button>
+											</span>
+										</div>
+										<div ng-show="formConsultaAsignacion.inputBusquedaAsignacion.$error.required && formConsultaAsignacion.inputBusquedaAsignacion.$dirty"
+												 ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+							<!-- div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="comboPeriodoIncidencia">Fecha inicio:</label>
+										<div class="input-group" datetime-picker
+											 ng-model="filtroFechas.fechaInicio"
+ 											 on-change="buscarRutaDispositivo()"
+											 idioma-dtp="{{currentLanguage}}"
+											 options="limitStartDatePicker">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" class="form-control pull-right inputFecha" id="dateInicioRutas" name="dateInicioRutas" readonly/>
+											<input class="form-control" id="inputBusquedaFechaInicio" name="inputBusquedaFechaInicio" ng-model="busquedaVO.fechaInicio" ng-required="true" />
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="comboPeriodoIncidencia">Fecha fin:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<input class="form-control" id="inputBusquedaFechaFin" name="inputBusquedaFechaFin" ng-model="busquedaVO.fechaFin" ng-required="true" />
+										</div>
+									</div>
+								</div>
+							</div-->
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-if="listaAsignaciones.length >0">
+			<div class="col-xs-12">
+				<div class="box box-danger">
+					<div class="box-header row">
+						<div class="col-md-6 col-xs-12">
+							<h3 class="box-title">Resultados encontrados: {{ (listaAsignaciones | filter : view.searchSomething).length }}</h3>
+						</div>
+						<div class="col-md-offset-3 col-md-3 col-xs-10">
+							<div class="input-group pull-right">
+								<input type="text" id="searchsomething" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+								<div class="input-group-addon"><i class="fa fa-search"></i></div>
+							</div>
+						</div> 
+					</div>
+					<div class="box-body table-responsive">
+						<table id="tabla_infracciones" class="table table-striped table-hover header-fixed">
+							<thead>
+								<tr>
+									<th align="center" sort order="'nbUsuario'" by="order" reverse="reverse">USUARIO</th>
+									<th align="center" sort order="'nbNombre'" by="order" reverse="reverse">NOMBRE COMPLETO</th>
+									<th align="center" sort order="'nbLote'" by="order" reverse="reverse">PUNTO TACTICO</th>
+									<th align="center" sort order="'nbArchivo'" by="order" reverse="reverse">ARCHIVO CSV</th>
+									<th align="center" sort order="'stValidacion'" by="order" reverse="reverse">ESTATUS</th>
+									<th align="center" sort order="'fhAsignacion'" by="order" reverse="reverse">FECHA ASIGNADO</th>
+									<th align="center" sort order="'fhUltimaValidacion'" by="order" reverse="reverse">ULTIMA REVISION</th>
+									<th align="center">ACCIÓN</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr dir-paginate="asign in listaAsignaciones | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+									<td class="center">{{ asign.nbUsuario }}</td>
+									<td class="center">{{ asign.nbNombre }}</td>
+									<td class="center">{{ asign.nbLote }}</td>
+									<td class="center">{{ asign.nbArchivo }}</td>
+									<td class="center"><label class="label" ng-class="{'label-success':asign.stValidacion,'label-warning':!asign.stValidacion}">{{asign.stValidacion ? 'Validado':'Validando'}}</label></td>
+									<td class="center">{{ asign.fhAsignacion }}</td>
+									<td class="center">{{ asign.fhUltimaValidacion }}</td>
+									<td class="center">
+										<a class="fa fa-user-times fa-2x" ng-click="cancelarAsignacion(asign)"data-toggle="tooltip" data-placement="left" title="Revocar Asignación"></a>
+									</td>
+								</tr>
+								<tr ng-if="(listaAsignaciones | filter:view.searchSomething).length < 1"><td colspan="10" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="container-fluid">
+						<div class="fixed-table-pagination" style="display:block;">
+							<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="listaAsignaciones"></rows-per-page>
+							<div class="pull-right pagination">
+								<dir-pagination-controls class="pagination"></dir-pagination-controls>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>{{breadCrumbs.servicio}}</h1>
+		<ol class="breadcrumb">
+			<li><a> <i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}
+			</a></li>
+			<li class="active">{{breadCrumbs.servicio}}</li>
+		</ol>
+	</section>
+	<section class="content">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Búsqueda Avanzada</h3>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-sm-6 col-md-offset-3">
+								<div class="form-group">
+									<label for="checkTest1" class="labelCheck noneSelectedUser">
+										Tipo de Búsqueda
+									</label>
+									<switcher class="swTeclo pull-right"
+										id-check="checkTest1"
+										ng-disabled="isDisabled"
+										true-label="Avanzada"
+										true-value="'active'"
+										false-label="Todos"
+										false-value="'inactive'"
+										ng-change="changeSearch()"
+										ng-model="switchTest1">
+									</switcher>
+								</div>
+							</div>
+						</div>
+						<div ng-show="advancedSearch">
+								<form role="form" name="formConsultaReporte" ng-submit="consultarReportesValidacion()" novalidate>
+										<div class="row">
+											<div class="col-md-6 col-md-offset-3">
+												<div class="form-group" ng-class="{'has-error': formConsultaReporte.comboEntregablesSelected.$error.required && formConsultaReporte.comboEntregablesSelected.$dirty}">
+													<label for="comboPeriodoReporte">Entregables:</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-list"></i>
+														</div>
+														<select class="form-control" id="comboEntregables" name="comboEntregables"
+																data-minimum-results-for-search="Infinity" select2
+																idioma-s2="{{currentLanguage}}"
+																ng-options="entregable.nameCat for entregable in listaEntregables"
+																ng-model="comboEntregablesSelected">
+																<option value="" selected="Todos">Seleccione</option>
+														</select>
+													</div>
+												</div>
+												<span ng-show="!hasValue(comboEntregablesSelected.nameCat)">
+													<span style="color: red;">Campo requerido</span>
+												</span>
+											</div>
+<!--
+											<div class="col-md-3 col-md-offset-1">
+												<div class="form-group" ng-class="{'has-error': formConsultaReporte.busquedaVO.fhInicio.$error.required && formConsultaReporte.busquedaVO.fhInicio.$dirty}">
+													<label>
+														Fecha Inicio
+													</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</div>
+														<input class="form-control inputFecha" id="fechaPicker1"
+															date-picker
+															idioma-dp="{{currentLanguage}}"
+															elemento="'fechaPicker'"
+															ng-model="busquedaVO.fhInicio"
+															readonly />
+													</div>
+												</div>
+												<span ng-show="!hasValue(busquedaVO.fhInicio)">
+													<span style="color: red;">Campo requerido</span>
+												</span>
+											</div>
+			
+											<div class="col-md-3">
+												<div class="form-group" ng-class="{'has-error': formConsultaReporte.busquedaVO.fhFin.$error.required && formConsultaReporte.busquedaVO.fhFin.$dirty}">
+													<label>
+														Fecha Fin
+													</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</div>
+														<input class="form-control inputFecha" id="fechaPicker2"
+															date-picker
+															idioma-dp="{{currentLanguage}}"
+															elemento="'fechaPicker'"
+															ng-model="busquedaVO.fhFin"
+															readonly />
+													</div>
+												</div>
+												<span ng-show="!hasValue(busquedaVO.fhFin)">
+														<span style="color: red;">Campo requerido</span>
+												</span>
+											</div>
+			-->
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="comboPeriodoReporte">&nbsp;&nbsp;</label>
+													<div class="input-group"></div>
+														<span class="input-group-btn">
+															<button type="submit" class="btn btn-danger btn-flat" >{{ 'APP.Base.boton.buscar' |translate}}</button>
+														</span>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										
+									</form>
+						</div>
+						<div ng-show="!advancedSearch">
+				
+						</div>
+							
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-if="listaReporte.length >0">
+			<div class="col-xs-12">
+				<div class="box box-danger">
+					<div class="box-header row">
+						<div class="col-md-6 col-xs-12">
+							<h3 class="box-title">Resultados encontrados: {{ (listaReporte | filter : view.searchSomething).length }}</h3>
+						</div>
+						<div class="col-md-offset-3 col-md-3 col-xs-10">
+			      			<div class="input-group pull-right">
+			        			<input type="text" id="searchsomething" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+								<div class="input-group-addon"><i class="fa fa-search"></i></div>
+			     			</div>
+			     		</div> 
+					</div>
+					<div class="box-body table-responsive">
+						<table id="tabla_infracciones" class="table table-striped table-hover header-fixed">
+							<thead>
+								<tr>
+									<th align="center" sort order="'nombre'" by="order" reverse="reverse">ID PT</th>
+									<th align="center" sort order="'color'" by="order" reverse="reverse">PUNTO TÁCTICO</th>
+									<th align="center" sort order="'tipo'" by="order" reverse="reverse">ENTREGA</th>
+									<th align="center" sort order="'color'" by="order" reverse="reverse">TOTAL ARCHIVOS CSV</th>
+									<th align="center" sort order="'color'" by="order" reverse="reverse">TOTAL REGISTROS VALIDADOS</th>
+									<th align="center">DESCARGA</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr dir-paginate="reporte in listaReporte | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+									<td class="center">{{ reporte.idLote }}</td>
+									<td class="center">{{ reporte.nbLote }}</td>
+									<td class="center">{{ reporte.nbEntrega }}</td>
+									<td class="center">{{ reporte.nuArchivos }}</td>
+									<td class="center">{{ reporte.nuRegistros }}</td>
+									<td class="center">
+										<a ng-click="descargarZIPReporte(reporte.idLote)"  class="fa fa-download fa-2x" data-toggle="tooltip" data-placement="left" title="Descargar ZIP"></a>
+									</td>
+								</tr>
+								<tr ng-if="(listaReporte | filter:view.searchSomething).length < 1"><td colspan="10" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="container-fluid">
+						<div class="fixed-table-pagination" style="display:block;">
+							<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="listaReporte"></rows-per-page>
+							<div class="pull-right pagination">
+								<dir-pagination-controls class="pagination"></dir-pagination-controls>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<modal visible="showModalDetalleGeocerca" size-modal="lg" noescape modalstatic>
+			<modal-header title="Dispositivos asociados"></modal-header>
+			<modal-body>
+				<div class="box-header row">
+					<div class="col-md-6 col-xs-12">
+						<h3 class="box-title">{{ 'GEOCERCAS.Consulta.resultadoDetalle.tituloBox' | translate}}: {{ (detalleVO | filter : view2.searchSomething).length }}</h3>
+					</div>
+					<div class="col-md-offset-3 col-md-3 col-xs-10">
+						<div class="input-group pull-right">
+							<input type="text" id="searchdetailsomething" class="form-control" placeholder="Buscar por filtro" ng-model="detalleView.searchSomething">
+							<div class="input-group-addon"><i class="fa fa-search"></i></div>
+						</div>
+					</div> 
+				</div>
+				<div class="box-body table-responsive">
+					<table id="tabla_infracciones" class="table table-striped table-hover header-fixed">
+						<thead>
+							<tr>
+								<th align="center">{{ 'GEOCERCAS.Consulta.resultadoDetalle.dispositivos' | translate}}</th>
+								<th align="center">{{ 'GEOCERCAS.Consulta.resultadoDetalle.tipo' | translate}}</th>
+								<th align="center">{{ 'GEOCERCAS.Consulta.resultadoDetalle.estatus' | translate}}</th>
+								<th align="center">{{ 'GEOCERCAS.Consulta.resultadoDetalle.marca' | translate}}</th>
+								<th align="center">{{ 'GEOCERCAS.Consulta.resultadoDetalle.modelo' | translate}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr dir-paginate="detalle in detalleVO | orderBy:order:reverse | filter:detalleView.searchSomething | itemsPerPage: detalleView.rowsPerPage" pagination-id="tablaDetalleGeocerca">
+								<td class="center">{{ detalle.nombre}}</td>
+								<td class="center">{{ detalle.tipo }}</td>
+								<td class="center">{{ detalle.activo ? 'Activo':'Inactivo' }}</td>
+								<td class="center">{{ detalle.marca}}</td>
+								<td class="center">{{ detalle.modelo }}</td>
+							</tr>
+							<tr ng-if="(detalleVO | filter:detalleView.searchSomething).length < 1"><td colspan="10" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="container-fluid">
+					<div class="fixed-table-pagination" style="display:block;">
+						<rows-per-page rows="detalleView.rowsPerPage" filtro="detalleView.searchSomething" array="detalleVO"></rows-per-page>
+						<div class="pull-right pagination">
+							<dir-pagination-controls class="pagination" pagination-id="tablaDetalleGeocerca"></dir-pagination-controls>
+						</div>
+					</div>
+				</div>
+			</modal-body>
+			<modal-footer btn-close="{{ 'APP.Base.boton.cerrar' | translate}}"></modal-footer>
+		</modal>
+	</section>
+</body>
+</html>

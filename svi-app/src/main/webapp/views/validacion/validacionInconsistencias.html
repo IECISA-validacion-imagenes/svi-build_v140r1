@@ -1,0 +1,581 @@
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1 >Validación de Inconsistencias</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Expedientes</a></li>
+			<li class="active">Validación de Expedientes</li>
+		</ol>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+	
+				<!-- Mensaje de inactivo -->
+				<div ng-show="mostrarAlgo">
+					<div ng-show="!imagenesAsignadas">
+						<div class="row">
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p class="alert alert-teclo ngIfAnimate">No hay Registros a Revalidar </p>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div>
+					
+					<div ng-show="imagenesAsignadas" >
+						<div class="row">
+<!-- Lista de imágenes -->
+							<div class="col-md-2"></div>
+							<div class="col-md-8">
+								<div class="box box-danger" ng-class="{'collapsed-box':!isOpen}">
+									<div class="box-header with-border text-center" >
+										<h3 class="box-title">PT: {{currentData.nodoVpn}} | Archivo: {{currentData.nbArchivoCsv}} | Registros Validados: {{validacionDatosVO.regValidados}} / {{validacionDatosVO.totalRegistros}}</h3>
+										<div class="box-tools pull-right">
+											<button id="x1" type="button" class="btn btn-box-tool"
+													data-widget="collapse" ng-click="isOpen = !isOpen">
+												<i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+									<div id="hideElement1" class="box-body">
+										<div class="col-md-4">
+											<h4 class="box-title">Registros por validar: {{(dataRegistros |  filter : view.searchSomething).length | number}}</h4>
+										</div>
+										<div class="col-md-4"></div>
+										<div class="col-md-4">
+											<div class="input-group">
+												<input id="searchSomething" type="text" class="form-control"
+													   placeholder="Buscar por filtro"
+													   ng-model="view.searchSomething"> <span
+													class="input-group-addon"><i class="fa fa-search"></i></span>
+											</div>
+										</div>
+									</div>
+									<div id="hideElement2" class="box-body">
+										<div class="row" >
+											<table id="tabla_imagenes" class="table table-hover header-fixed table-responsive" >
+												<thead>
+												<tr>
+													<th class="text-center">ID REGISTRO</th>
+													<th class="text-center">CARRIL</th>
+													<th class="text-center">PLACA DELANTERA</th>
+													<th class="text-center">ENTIDAD DELANTERA</th>
+													<th class="text-center">PLACA TRASERA</th>
+													<th class="text-center">ENTIDAD TRASERA</th>
+													<th class="text-center">PERFIL</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-class="{'test': val.idRegistroCsv == currentData.idRegistroCsv}"
+													dir-paginate="val in dataRegistros | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage"
+													ng-click = "clickEnTablaImagenes(val,$event)" class="clickable-row">
+													<td class="text-center">{{val.idRegistroCsv}}</td>
+													<td class="text-center">{{val.nuCarril}}</td>
+													<td class="text-center">{{val.cdPlacaDelantera}}</td>
+													<td class="text-center">{{val.cdEntidadDelantera}}</td>
+													<td class="text-center">{{val.cdPlacaTrasera}}</td>
+													<td class="text-center">{{val.cdEntidadTrasera}}</td>
+													<td class="text-center">{{val.cdPerfil}}</td>
+												</tr>
+												<tr ng-if="(dataRegistros | filter:view.searchSomething).length < 1"><td colspan="8" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="container-fluid">
+											<div class="fixed-table-pagination" style="display:block;">
+												<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="dataRegistros"></rows-per-page>
+												<div class="pull-right pagination">
+													<dir-pagination-controls class="pagination"></dir-pagination-controls>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<div class="row">
+							<!-- 		Datos de boleta -->
+							<div class="col-md-8">
+								<div class="box box-danger containersDataDesign">
+									<div class="box-header with-border text-center">
+										<h3 class="box-title">Visor de Imágenes</h3>
+									</div>
+									<div class="box-body boxbody-height">
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                	<a class="hand-cursor" ng-mouseover="selectImagen('ambiente')" ng-click="selectImagen('ambiente')">
+	                                                <div class="imagenVehicle">
+	                                                	<h5 class="box-title titleimg">Ambiente</h5>
+	                                                	<img ng-src="{{currentSetImagenes.nbImagenAmbiental}}" id="imagenMostrar"
+															class="center-block img-thumbnail"/>
+	                                                </div>
+	                                                </a>
+	                                                <a class="hand-cursor" ng-mouseover="selectImagen('placaDel')" ng-click="selectImagen('placaDel')">
+	                                                <div class="imagenVehicle">
+	                                                	<h5 class="box-title titleimg">Placa Delantera</h5>
+	                                                	<img width="100%" ng-src="{{currentSetImagenes.nbImagenPlacaDelantera}}" id="imagenMostrar"
+															class="center-block img-thumbnail"/>
+	                                                </div>
+	                                                </a>
+	                                                <a class="hand-cursor" ng-mouseover="selectImagen('placaTra')" ng-click="selectImagen('placaTra')">
+	                                                <div class="imagenVehicle">
+	                                                	<h5 class="box-title titleimg">Placa Trasera</h5>
+	                                                	<img width="100%" ng-src="{{currentSetImagenes.nbImagenPlacaTrasera}}" id="imagenMostrar"
+															class="center-block img-thumbnail"/>
+	                                                </div>
+	                                                </a>
+	                                                <a class="hand-cursor" ng-mouseover="selectImagen('diver')" ng-click="selectImagen('diver')">
+	                                                <div class="imagenVehicle">
+	                                                	<h5 class="box-title titleimg">Conductor</h5>
+	                                                	<img width="100%" ng-src="{{currentSetImagenes.nbImagenConductor}}" id="imagenMostrar"
+															class="center-block img-thumbnail"/>
+	                                                </div>
+													</a>
+													<a class="hand-cursor" ng-mouseover="selectImagen('perfil')" ng-click="selectImagen('perfil')">
+														<div class="imagenVehicle">
+															<h5 class="box-title titleimg">Silueta</h5>
+															<img width="100%" ng-src="{{currentSetImagenes.nbImagenPerfil}}" id="imagenMostrar"
+																class="center-block img-thumbnail"/>
+														</div>
+														</a>
+                                                </div>
+                                                <div class="col-md-10">
+													<a class="hand-cursor">
+													<div class="img-magnifier-container img-thumbnail ">
+													  <img id="myimage" 
+													  
+													  src="" 
+													  width="100%" height="460px">
+													</div>
+													</a>
+												</div>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+
+							</div>
+							
+							
+
+							<!-- 		Visor de las imágenes -->
+							<div class="col-md-4">
+								<div class="box box-danger containersDataDesign">
+									<div class="box-header with-border text-center">
+										<a ng-click="navigateInList('retroceder',-1)"> 
+											<text tooltip="Anterior" class="btn-left-right">
+												<i class="fa fa-arrow-circle-left"></i>
+											</text></a>&nbsp;&nbsp;&nbsp;<h3 class="box-title">Datos del Vehículo</h3> 
+											<a ng-click="navigateInList('avanzar',-1)"> &nbsp;&nbsp;&nbsp;<text class="btn-left-right" tooltip="Siguiente"><i class="fa fa-arrow-circle-right">
+											</i></text> </a>
+									</div>
+									<div class="box-body boxbody-height containersDataDesign2">
+										<!-- Botones de operación sobre la imagen -->
+										<div class="row img-viewer">
+											<form  name="formValidaRegistro" class="formvalidaregistroclass" role="form" novalidate >
+											<div class="col-md-12">
+<!-- 												INPUTS -->
+												<div class="row">  
+                                                        <div class="col-md-6 col-md-offset-1">
+                                                            <div class="form-group" ng-class="{'has-error': formValidaRegistro.inputPlacaDelantera.$error.required && formValidaRegistro.inputPlacaDelantera.$dirty}">
+                                                                <label for="checkPlacaDelantera">Placa Delantera:</label>
+                                                                <div class="input-group" id="placa-del"> 
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                    <input type="text" id="inputPlacaDelantera"
+																		ng-blur="validacionAutomatica('PlacaDelantera')"
+																		ng-model="currentData.cdPlacaDelantera"
+																		name="inputPlacaDelantera" class="form-control"
+																		ng-required="true"
+																		ng-disabled="!formConfigCaptura.pDplacaDelantera || currentDataCheck.checkPlacaDelanteraModel"
+																		tabindex="1" ng-change="validaCambios()" autofocus />
+                                                                </div>
+                                                                <span ng-show="!hasValue(currentData.cdPlacaDelantera)">
+																<span style="color: red;">Campo requerido</span>
+																</span>
+	                                                                <span ng-show="validaFraccion">
+	                                                                <span style="color: red;">Campo incorrecto</span>
+																</span>
+                                                            </div>
+                                                        </div>
+														<div class="col-md-2 ">	
+                                                        	<div class="form-group">
+                                                        	<label for="checkPlacaDelanteraOficial">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkPlacaDelanteraOficial"
+																id="checkPlacaDelanteraOficial"
+																name="checkPlacaDelanteraOficial" true-label="Oficial"
+																true-value="true" false-label="" false-value="false"															
+																ng-model="currentDataCheck.checkPlacaDelanteraOficialModel"
+																ng-disabled="!formConfigCaptura.pDoficial || currentDataCheck.checkPlacaDelanteraModel">
+															</switcher>
+															</div>
+                                                        </div>
+														<div class="col-md-2 ">	
+                                                        	<div class="form-group">
+                                                        	<label for="checkPlacaDelantera">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkPlacaDelantera" id="checkPlacaDelantera"
+																name="checkPlacaDelantera" true-label="Sin Placa"
+																true-value="true" false-label="" false-value="false"
+																ng-click="checkPlacaDelanteraAction()"
+																ng-disabled="!formConfigCaptura.pDsinPlaca"
+																ng-model="currentDataCheck.checkPlacaDelanteraModel">
+															</switcher>
+															</div>
+                                                        </div>
+                                                        
+                                                    </div>                                                  
+                                                    
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-md-offset-1">
+                                                            <div class="form-group" ng-class="{'has-error': formValidaRegistro.comboEntidadDelantera.$error.required && formValidaRegistro.comboEntidadDelantera.$dirty}">
+                                                                <label for="perfil">Entidad Delantera </label>
+                                                                <div class="input-group" id="entidad-del" >
+                                                                    <div class="input-group-addon ">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                    <!--Este select se habilita si el campo esta bloqueado-->
+                                                                    <select class="form-control inputsValidacionImagen"
+																		select id="comboEntidadDelantera"
+																		name="comboEntidadDelantera"
+																		ng-model="entidadDelanteraSelected"
+																		ng-change="setToEntidadDelantera(); validacionAutomatica('EntidadDelantera')"
+																		ng-required="true"
+																		ng-options="x as x.txDescEntidad for x in catEntidades track by x.idPtCatalogoEntidad"
+																		ng-disabled="!formConfigCaptura.pDentidadDelantera || currentDataCheck.checkEntidadDelanteraModel"
+																		ng-if="!formConfigCaptura.pDentidadDelantera || currentDataCheck.checkEntidadDelanteraModel"
+																		tabindex="2">
+																	</select>
+																	
+																
+																	  <!--Este select se habilita si el campo esta desbloqueado-->
+																	  <select  class="form-control inputsValidacionImagen"
+																		select2 id="comboEntidadDelantera"
+																		name="comboEntidadDelantera"
+																		ng-model="entidadDelanteraSelected"
+																		ng-change="setToEntidadDelantera(); validacionAutomatica('EntidadDelantera')"
+																		ng-required="true"
+																		ng-options="x as x.txDescEntidad for x in catEntidades track by x.idPtCatalogoEntidad"
+																		ng-if="formConfigCaptura.pDentidadDelantera || currentDataCheck.checkEntidadDelanteraModel"
+																		tabindex="2">
+																	</select>
+																
+																	
+                                                                </div>
+                                                                <span ng-show="entidadDelanteraSelected==null">
+																	<span style="color: red;">Campo requerido</span>
+																</span>
+<!--                                                                 <span ng-show="validaFraccion"> -->
+<!--                                                                 <span style="color: red;">Campo incorrecto</span> -->
+																<!-- /span> -->
+                                                            </div>
+                                                        </div>
+														
+														
+														<div class="col-md-3 col-md-offset-1">	 
+                                                        	<label for="checkEntidadDelantera">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkEntidadDelantera"
+																id="checkEntidadDelantera" name="checkEntidadDelantera"
+																true-label="Sin Entidad" true-value="true" false-label=""
+																false-value="false"
+																ng-click="checkEntidadDelanteraAction()"
+																ng-disabled="!formConfigCaptura.pDsinEntidad"
+																ng-model="currentDataCheck.checkEntidadDelanteraModel">
+															</switcher>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-md-offset-1">
+                                                            <div class="form-group" ng-class="{'has-error': formValidaRegistro.inputPlacaTrasera.$error.required && formValidaRegistro.inputPlacaTrasera.$dirty}">
+                                                                <label for="checkPlacaTrasera">Placa Trasera:</label>
+                                                                <div class="input-group" id="placa-tras">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                    <input type="text" id="inputPlacaTrasera"
+																		ng-blur="validacionAutomatica('PlacaTrasera')"
+																		ng-model="currentData.cdPlacaTrasera"
+																		name="inputPlacaTrasera"
+																		class="form-control inputsValidacionImagen"
+																		ng-required="true"
+																		ng-disabled="!formConfigCaptura.pTplacaTrasera || currentDataCheck.checkPlacaTraseraModel"
+																		tabindex="3" ng-change="validaCambios()" />
+                                                                </div>
+                                                                <span ng-show="!hasValue(currentData.cdPlacaTrasera)">
+																<span style="color: red;">Campo requerido</span>
+															</span>
+<!--                                                                 <span ng-show="validaFraccion"> -->
+<!--                                                                 <span style="color: red;">Campo incorrecto</span> -->
+															</span>
+                                                            </div>
+														</div>
+														
+														<div class="col-md-2 ">	
+                                                        	<label for="articulo">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkPlacaTraseraOficial"
+																id="checkPlacaTraseraOficial"
+																name="checkPlacaTraseraOficial" true-label="Oficial"
+																true-value="true" false-label="" false-value="false"														
+																ng-model="currentDataCheck.checkPlacaTraseraOficialModel"
+																ng-disabled="!formConfigCaptura.pToficial || currentDataCheck.checkPlacaTraseraModel">
+		
+															</switcher>
+														</div>
+														
+                                                        <div class="col-md-2 ">	
+                                                        	<label for="articulo">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkPlacaTrasera" id="checkPlacaTrasera"
+																name="checkPlacaTrasera" true-label="Sin Placa"
+																true-value="true" false-label="" false-value="false"
+																ng-click="checkPlacaTraseraAction()"
+																ng-disabled="!formConfigCaptura.pTsinPlaca"
+																ng-model="currentDataCheck.checkPlacaTraseraModel">
+															</switcher>
+                                                        </div>
+                                                    </div>
+
+													<div class="row">
+                                                        <div class="col-md-6 col-md-offset-1">
+                                                            <div class="form-group" ng-class="{'has-error': formValidaRegistro.comboEntidadTrasera.$error.required && formValidaRegistro.comboEntidadTrasera.$dirty}">
+                                                                <label for="perfil">Entidad Trasera:</label>
+                                                                <div class="input-group" id="entidad-tras">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                    
+                                                                    <!--Este select se habilita si el campo esta bloqueado-->
+                                                                    <select class="form-control inputsValidacionImagen"
+																		select id="comboEntidadTrasera"
+																		name="comboEntidadTrasera"
+																		ng-model="entidadTraseraSelected"
+																		ng-change="setToEntidadTrasera(); validacionAutomatica('EntidadTrasera')"
+																		ng-required="true"
+																		ng-options="x as x.txDescEntidad for x in catEntidades track by x.idPtCatalogoEntidad"
+																		ng-disabled="!formConfigCaptura.pTentidadTrasera || currentDataCheck.checkEntidadTraseraModel"
+																		ng-if="!formConfigCaptura.pTentidadTrasera || currentDataCheck.checkEntidadTraseraModel"
+																		tabindex="4">
+																	</select>
+																	
+																	   <!--Este select se habilita si el campo esta desbloqueado-->
+																	   <select class="form-control inputsValidacionImagen"
+																		select2 id="comboEntidadTrasera"
+																		name="comboEntidadTrasera"
+																		ng-model="entidadTraseraSelected"
+																		ng-change="setToEntidadTrasera(); validacionAutomatica('EntidadTrasera')"
+																		ng-required="true"
+																		ng-options="x as x.txDescEntidad for x in catEntidades track by x.idPtCatalogoEntidad"
+																		ng-if="formConfigCaptura.pTentidadTrasera || currentDataCheck.checkEntidadTraseraModel"
+																		tabindex="4">
+																	 </select>
+																	
+																	
+																	
+																	
+<!--                                                                     <input type="text"  id="articulo" -->
+<!--                                                                            ng-model="currentData.perfil" -->
+<!--                                                                            name="articulo" ng-hide="hideInput" -->
+<!--                                                                            class="form-control inputsValidacionImagen" ng-required="true" -->
+<!--                                                                            ng-disabled="disableInput" tabindex="8" -->
+<!--                                                                            ng-change="validaCambios()"/> -->
+                                                                </div>
+                                                                <span ng-show="entidadTraseraSelected==null">
+																	<span style="color: red;">Campo requerido</span>
+																</span>
+                                                                <span ng-show="validaFraccion">
+                                                                	<span style="color: red;">Campo incorrecto</span>
+																</span>
+															</div>
+                                                        </div>
+                                                        <div class="col-md-3 col-md-offset-1">	 
+                                                        	<label for="checkEntidadDelantera">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkEntidadTrasera" id="checkEntidadTrasera"
+																name="checkEntidadTrasera" true-label="Sin Entidad"
+																true-value="true" false-label="" false-value="false"
+																ng-click="checkEntidadTraseraAction()"
+																ng-disabled="!formConfigCaptura.pTsinEntidad"
+																ng-model="currentDataCheck.checkEntidadTraseraModel">
+															</switcher>
+                                                        </div>
+                                                    </div>
+													
+													<div ng-show="false" class="row">
+                                                        <div class="col-md-10 col-md-offset-1">
+                                                            <div class="form-group" ng-class="{'has-error': siluetaSelected==null}">
+                                                                <label for="silueta">Validacion Siluetas:</label>
+                                                                <div class="input-group">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                    <select class="form-control inputsValidacionImagen"
+																		select2 id="silueta" ng-model="siluetaSelected"
+																		ng-options="c as c.txtDescripcion for c in catSiluetas track by c.idCatValidacion"
+																		ng-disabled="!formConfigCaptura.eXsilueta">
+																	</select>
+                                                                </div>
+                                                                <span ng-show="siluetaSelected==null">
+																<span style="color: red;">Campo requerido</span>
+														   </div>
+														</div>
+													</div>
+													<div class="row">
+                                                        <div class="col-md-4 col-md-offset-2">
+															<switcher class="swTeclo pull-right"
+																id-check="checkDoblePlaca" id="checkDoblePlaca"
+																name="checkDoblePlaca" true-label="Doble Placa"
+																true-value="true" false-label="" false-value="false"														
+																ng-disabled="!formConfigCaptura.eXdoblePlaca"
+																ng-model="currentDataCheck.checkDoblePlacaModel">
+															</switcher>
+														</div>
+														<div class="col-md-4 col-md-offset-2">
+															<switcher class="swTeclo pull-right"
+																id-check="checkPochimovil" id="checkPochimovil"
+																name="checkPochimovil" true-label="Pochimovil"
+																true-value="true" false-label="" false-value="false"
+																ng-disabled="!formConfigCaptura.eXpochimovil"
+																ng-click="checkPochimovilAction()"
+																ng-model="currentDataCheck.checkPochimovilModel">
+															</switcher>
+                                                        </div>
+													</div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-10 col-md-offset-1">
+                                                            <div class="form-group" ng-class="{'has-error': perfilSelected==null}">
+                                                                <label for="perfil">Perfil:</label>
+                                                                <div class="input-group" id="perfil">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                       <!--Este select se habilita si el campo esta bloqueado-->
+                                                                   <select class="form-control inputsValidacionImagen"
+																		select id="perfil" ng-model="perfilSelected"
+																		ng-change="setToPerfil()"
+																		ng-options="x as x.marcaSubPerfil for x in catPerfiles"
+																		ng-if="!formConfigCaptura.eXperfil || currentDataCheck.checkPochimovilModel"
+																		ng-disabled="!formConfigCaptura.eXperfil || currentDataCheck.checkPochimovilModel"
+																		tabindex="5">
+																	</select>
+																	   <!--Este select se habilita si el campo esta desbloqueado-->
+																	   <select class="form-control inputsValidacionImagen"
+																		select2 id="perfil" ng-model="perfilSelected"
+																		ng-change="setToPerfil()"
+																		ng-options="x as x.marcaSubPerfil for x in catPerfiles"
+																		ng-if="formConfigCaptura.eXperfil || currentDataCheck.checkPochimovilModel"
+																		tabindex="5">
+																	</select>
+																	
+                                                                </div>
+                                                                <span ng-show="perfilSelected==null">
+																<span style="color: red;">Campo requerido</span>
+															</span>
+<!--                                                                 <span ng-show="validaFraccion"> -->
+<!--                                                                 <span style="color: red;">Campo incorrecto</span> -->
+															</span>
+                                                            </div>
+														</div>
+														<!--
+                                                        <div class="col-md-2">
+                                                        	<label for="checkPochimovil">&nbsp;&nbsp;</label>
+															<switcher class="swTeclo pull-right"
+																id-check="checkPochimovil" id = "checkPochimovil"
+					                                                  name = "checkPochimovil"
+																true-label="Pochimovil"
+																true-value="true"
+																false-label=""
+																false-value="false"
+					                                            ng-click="checkPochimovilAction()"
+																ng-model="currentDataCheck.checkPochimovilModel">
+															</switcher>
+                                                        </div>
+													-->
+													</div>
+													
+                                                    <!-- catalogo de clasificacion  -->
+                                                    
+                                                     <div class="row">
+                                                        <div class="col-md-1"></div>
+                                                        <div class="col-md-10">
+                                                            <div class="form-group" ng-class="{'has-error': clasificExpedienteSelected==null}">
+                                                                <label for="clasificacion">Clasificacion Expediente:</label>
+                                                                <div class="input-group" id="clasificaion">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-bars"></i>
+                                                                    </div>
+                                                                       <!--Este select se habilita si el campo esta bloqueado-->
+                                                                    <select class="form-control inputsValidacionImagen"
+																		select id="clasificacion"
+																		ng-model="clasificExpedienteSelected"
+																		ng-change="setToClasificSelected()"
+																		ng-disabled="!formConfigCaptura.eXclasificacion"
+																		ng-if="!formConfigCaptura.eXclasificacion"
+																		ng-options="t as t.txClasifExpe for t in catClasifExpediente track by t.idPtClasifExpe"
+																		tabindex="6">
+																	</select>
+																	   <!--Este select se habilita si el campo esta desbloqueado-->
+																	   <select class="form-control inputsValidacionImagen"
+																		select2 id="clasificacion"
+																		ng-model="clasificExpedienteSelected"
+																		ng-change="setToClasificSelected()"
+																		ng-if="formConfigCaptura.eXclasificacion"
+																		ng-options="t as t.txClasifExpe for t in catClasifExpediente track by t.idPtClasifExpe"
+																		tabindex="6">
+																	</select>
+																	
+																	
+                                                                </div>
+                                                                <span ng-show="clasificExpedienteSelected==null">
+																<span style="color: red;">Campo requerido</span>
+														   </div>
+                                                        </div>
+                                                        <div class="col-md-1"></div>
+                                                    </div>
+                                                <!-- fin de catalogo de clasificacion  -->
+                                                
+                                                <!-- catalogo de validacion perfiles  -->
+                                                    
+                                                     
+												
+                                                <!-- fin de catalogo de clasificacion  -->
+                                                    <div class="box-header text-center">
+														
+														<button ng-click="clickEnBotonValidar()" type="button" class="btn btn-danger"
+															tabindex="8" id="aceptarBtn"
+															ng-disabled="buttonDisabled"
+                                                            name="aceptarBtn">
+	                                                        <i class="fa fa-check"></i>&nbsp;&nbsp;Validar
+	                                                    </button>
+													</div>
+                                                    
+											</div>
+											</form>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+	</section>
+	
+</body>
+</html>

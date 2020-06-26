@@ -1,0 +1,432 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>Detalle del Expediente</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Expedientes</a></li>
+			<li class="active">Consulta de Expedientes</li>
+		</ol>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="box box-danger" ng-class="{'collapsed-box':!isOpen}">
+					<div class="box-header with-border text-center">
+							<h3 class="box-title">PT: {{expediente.nbPtLote}} | Archivo:
+							{{expediente.nbArchivoCsv}} | Núm. exp.: {{expediente.nuExpediente}}</h3>
+
+						<button id="btnCollapse" type="button"
+							class="btn btn-box-tool pull-right" data-widget="collapse"
+							ng-click="isOpen = !isOpen">
+							<i class="fa fa-plus"></i>
+						</button>
+
+					</div>
+
+					<div class="box-body">
+						<table id="tablaHistValidaciones"
+							class="table table-hover header-fixed table-responsive" ng-if="expediente">
+							<thead>
+								<tr>
+									<th class="text-center">TIPO</th>
+									<th class="text-center">PLACA DELANTERA</th>
+									<th class="text-center">ENTIDAD DELANTERA</th>
+									<th class="text-center">PLACA TRASERA</th>
+									<th class="text-center">ENTIDAD TRASERA</th>
+									<th class="text-center">MARCA</th>
+									<th class="text-center">MODELO</th>
+									<th class="text-center">PERFIL</th>
+									<th class="text-center">FECHA CREACIÓN</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr
+									dir-paginate="val in expediente.detalleHistorico | itemsPerPage: 5">
+									<td class="text-center">{{val.tipoValidacion}}</td>
+									<td class="text-center">{{val.cdPlacaD}}</td>
+									<td class="text-center">{{val.cdEntidadD}}</td>
+									<td class="text-center">{{val.cdPlacaT}}</td>
+									<td class="text-center">{{val.cdEntidadT}}</td>
+									<td class="text-center">{{val.marca}}</td>
+									<td class="text-center">{{val.subMarca}}</td>
+									<td class="text-center">{{val.cdPerfil}}</td>
+									<td class="text-center">{{val.fhCreacion}}</td>
+								</tr>
+								<tr
+									ng-if="expediente.detalleHistorico.length < 1">
+									<td colspan="8" class="text-center"><h4>No se
+											encontraron coincidencias</h4></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="box box-danger">
+					<div class="box-header boxheader-height with-border text-center">
+						<h3 class="box-title">Visor de Imágenes</h3>
+					</div>
+					<div class="box-body boxbody-height">
+						<div class="row">
+							<div class="col-md-2">
+								<a class="hand-cursor" ng-mouseover="selectImagen('ambiente')"
+									ng-click="selectImagen('ambiente')">
+									<div class="imagenVehicle">
+										<h5 class="box-title titleimg">Ambiente</h5>
+										<img ng-src="{{currentSetImagenes.nbImagenAmbiental}}"
+											id="imagenMostrar" class="center-block img-thumbnail" />
+									</div>
+								</a> <a class="hand-cursor" ng-mouseover="selectImagen('placaDel')"
+									ng-click="selectImagen('placaDel')">
+									<div class="imagenVehicle">
+										<h5 class="box-title titleimg">Placa Delantera</h5>
+										<img width="100%"
+											ng-src="{{currentSetImagenes.nbImagenPlacaDelantera}}"
+											id="imagenMostrar" class="center-block img-thumbnail" />
+									</div>
+								</a> <a class="hand-cursor" ng-mouseover="selectImagen('placaTra')"
+									ng-click="selectImagen('placaTra')">
+									<div class="imagenVehicle">
+										<h5 class="box-title titleimg">Placa Trasera</h5>
+										<img width="100%"
+											ng-src="{{currentSetImagenes.nbImagenPlacaTrasera}}"
+											id="imagenMostrar" class="center-block img-thumbnail" />
+									</div>
+								</a> <a class="hand-cursor" ng-mouseover="selectImagen('diver')"
+									ng-click="selectImagen('diver')">
+									<div class="imagenVehicle">
+										<h5 class="box-title titleimg">Conductor</h5>
+										<img width="100%"
+											ng-src="{{currentSetImagenes.nbImagenConductor}}"
+											id="imagenMostrar" class="center-block img-thumbnail" />
+									</div>
+								</a> <a  class="hand-cursor" ng-mouseover="selectImagen('perfil')"
+									ng-click="selectImagen('perfil')">
+									<div class="imagenVehicle">
+										<h5 class="box-title titleimg">Silueta</h5>
+										<img width="100%"
+											ng-src="{{currentSetImagenes.nbImagenPerfil}}"
+											id="imagenMostrar" class="center-block img-thumbnail" />
+									</div>
+								</a>
+								<br> 
+								<a ng-click="regresar()"
+									class="btn btn-danger btn-flat pull-left"> <i
+									class="fa fa-arrow-circle-left"></i>
+									{{'APP.Base.boton.regresar' | translate}}
+								</a>
+							</div>
+							<div class="col-md-10">
+								<a class="hand-cursor">
+									<div class="img-magnifier-container img-thumbnail ">
+										<img id="myimage" src="" width="100%" height="460px">
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-4">
+				<div class="box box-danger">
+					<div class="box-header boxheader-height boxheader-inline ">
+						<div style="display:block;">
+							<a ng-click="navigateInList('retroceder')"> <text
+									tooltip="Anterior" class="btn-left-right"> <i
+									class="fa fa-arrow-circle-left"></i></text>
+							</a>
+							<h3 class="box-title">
+								&Uacute;ltimos Datos del Vehículo
+							</h3>
+							<a ng-click="navigateInList('avanzar')"><text
+									class="btn-left-right" tooltip="Siguiente"> <i
+									class="fa fa-arrow-circle-right"></i></text>
+							</a>
+						</div>
+						<div class="flex"><small class="text-muted"
+									ng-if="listaNavegacion.length > 0">{{indiceExpedienteSeleccionado
+									+ 1}} / {{listaNavegacion.length}}</small></div>
+					</div>
+					<div class="box-body boxbody-height">
+					 
+						<!-- Botones de operación sobre la imagen -->
+						<div class="row img-viewer">
+							<form name="formValidaRegistro" role="form">
+								<div class="col-md-12">
+
+									<div class="row">
+
+										<div class="col-md-6 col-md-offset-1">
+											<div class="form-group">
+												<label for="checkPlacaDelantera">Placa Delantera:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<input type="text" id="inputPlacaDelantera"
+														ng-model="expediente.cdPlacaDelantera"
+														name="inputPlacaDelantera" class="form-control"
+														ng-required="true" ng-disabled="true" tabindex="1"
+														autofocus />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="checkPlacaDelanteraOficial">&nbsp;&nbsp;</label>
+												<switcher class="swTeclo pull-right"
+													id-check="checkPlacaDelanteraOficial"
+													id="checkPlacaDelanteraOficial"
+													name="checkPlacaDelanteraOficial" true-label="Oficial"
+													true-value="true" false-label="" false-value="false"
+													ng-model="currentDataCheck.checkPlacaDelanteraOficialModel"
+													ng-disabled="true"> </switcher>
+											</div>
+										</div>
+										<div class="col-md-2 ">
+											<div class="form-group">
+												<label for="checkPlacaDelantera">&nbsp;&nbsp;</label>
+												<switcher class="swTeclo pull-right"
+													id-check="checkPlacaDelantera" id="checkPlacaDelantera"
+													name="checkPlacaDelantera" true-label="Sin Placa"
+													true-value="true" false-label="" false-value="false"
+													ng-model="currentDataCheck.checkPlacaDelanteraModel"
+													ng-disabled="true"> </switcher>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-md-offset-1">
+											<div class="form-group">
+												<label for="perfil">Entidad Delantera:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<input type="text" id="comboEntidadDelantera"
+														ng-model="expediente.txDescEntidadDelantera"
+														name="comboEntidadDelantera" class="form-control"
+														ng-required="true" ng-disabled="true" tabindex="2"
+														autofocus />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3 col-md-offset-1">
+											<label for="checkEntidadDelantera">&nbsp;&nbsp;</label>
+											<switcher class="swTeclo pull-right"
+												id-check="checkEntidadDelantera" id="checkEntidadDelantera"
+												name="checkEntidadDelantera" true-label="Sin Entidad"
+												true-value="true" false-label="" false-value="false"
+												ng-click="checkEntidadDelanteraAction()"
+												ng-model="currentDataCheck.checkEntidadDelanteraModel"
+												ng-disabled="true"> </switcher>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-md-offset-1">
+											<div class="form-group">
+												<label for="checkPlacaTrasera">Placa Trasera:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<input type="text" id="inputPlacaTrasera"
+														ng-model="expediente.cdPlacaTrasera"
+														name="inputPlacaTrasera"
+														class="form-control inputsValidacionImagen"
+														ng-required="true" ng-disabled="true" tabindex="3" />
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-2 ">
+											<label for="articulo">&nbsp;&nbsp;</label>
+											<switcher class="swTeclo pull-right"
+												id-check="checkPlacaTraseraOficial"
+												id="checkPlacaTraseraOficial"
+												name="checkPlacaTraseraOficial" true-label="Oficial"
+												true-value="true" false-label="" false-value="false"
+												ng-model="currentDataCheck.checkPlacaTraseraOficialModel"
+												ng-disabled="true"> </switcher>
+										</div>
+
+										<div class="col-md-2 ">
+											<label for="articulo">&nbsp;&nbsp;</label>
+											<switcher class="swTeclo pull-right"
+												id-check="checkPlacaTrasera" id="checkPlacaTrasera"
+												name="checkPlacaTrasera" true-label="Sin Placa"
+												true-value="true" false-label="" false-value="false"
+												ng-model="currentDataCheck.checkPlacaTraseraModel"
+												ng-disabled="true"> </switcher>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 col-md-offset-1">
+											<div class="form-group">
+												<label for="perfil">Entidad Trasera:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<input type="text" id="comboEntidadTrasera"
+														ng-model="expediente.txDescEntidadTrasera"
+														name="comboEntidadTrasera" class="form-control"
+														ng-required="true" ng-disabled="true" tabindex="4"
+														autofocus />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3 col-md-offset-1">
+											<label for="checkEntidadDelantera">&nbsp;&nbsp;</label>
+											<switcher class="swTeclo pull-right"
+												id-check="checkEntidadTrasera" id="checkEntidadTrasera"
+												name="checkEntidadTrasera" true-label="Sin Entidad"
+												true-value="true" false-label="" false-value="false"
+												ng-model="currentDataCheck.checkEntidadTraseraModel"
+												ng-disabled="true"> </switcher>
+										</div>
+									</div>
+
+									<div ng-show="false" class="row">
+										<div class="col-md-10 col-md-offset-1">
+											<div class="form-group">
+												<label for="silueta">Validaci&oacute;n Siluetas:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<input type="text" id="silueta"
+														ng-model="expediente.txSilueta" name="silueta"
+														class="form-control" ng-required="true" ng-disabled="true"
+														tabindex="7" autofocus />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4 col-md-offset-2">
+											<switcher class="swTeclo pull-right"
+												id-check="checkDoblePlaca" id="checkDoblePlaca"
+												name="checkDoblePlaca" true-label="Doble Placa"
+												true-value="true" false-label="" false-value="false"
+												ng-model="currentDataCheck.checkDoblePlacaModel"
+												ng-disabled="true"> </switcher>
+										</div>
+										<div class="col-md-4 col-md-offset-2">
+											<switcher class="swTeclo pull-right"
+												id-check="checkPochimovil" id="checkPochimovil"
+												name="checkPochimovil" true-label="Pochimovil"
+												true-value="true" false-label="" false-value="false"
+												ng-model="currentDataCheck.checkPochimovilModel"
+												ng-disabled="true"> </switcher>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-10 col-md-offset-1">
+											<div class="form-group">
+												<label for="perfil">Perfil:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<textarea id="perfil" name="perfil" class="form-control"
+														rows="2" cols="10"
+														ng-model="expediente.perfilSeleccionado" tabindex="5"
+														autofocus readonly>
+													</textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-1"></div>
+										<div class="col-md-10">
+											<div class="form-group">
+												<label for="clasificacion">Clasificaci&oacute;n
+													Expediente:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-bars"></i>
+													</div>
+													<textarea id="clasificacion" class="form-control" rows="1"
+														cols="10" ng-model="expediente.txClasifExpe" tabindex="6"
+														autofocus readonly>
+													</textarea>
+
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1"></div>
+									</div>
+									<!-- etiquetar cuando ya ha sido validado -->																		
+									<div class="row" ng-if="expediente.stValidacion === true">
+										<div class="col-md-10 col-md-offset-1 text-center">
+											<!-- cuando el expediente ya ha sido marcado -->
+											<h4 class="text-danger" ng-if="expediente.stPreSeleccion === true"> 
+												<i class="fa fa-tag"></i><small> Candidato a revalidaci&oacute;n</small> 
+												<small ng-if="filtro.nbEtiqueta"> con etiqueta {{filtro.nbEtiqueta}}</small>
+											</h4>
+											<!-- cuando el expediente NO  ha sido marcado -->
+											<div ng-if="expediente.stPreSeleccion === false">																									
+												<!-- cuando ya existe etiqueta -->
+												<button type="button" ng-if="filtro.idFiltro > 0" ng-click="confirmarMarcado()" class="btn btn-danger fullWidth">{{'APP.Base.boton.marcar'|translate}}</button>
+												<!-- cuando no existe etiqueta -->
+												<button type="button" ng-if="filtro.idFiltro == undefined" ng-click="ingresarEtiqueta()" class="btn btn-danger fullWidth" >{{'APP.Base.boton.marcar'|translate}}</button>												
+											</div>
+										</div>		
+									</div>
+							</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<form name="formEtiqueta" id="formEtiqueta" role="form" no-validate>
+			<modal visible="showModalEtiqueta" size-modal="40%" noescape
+				modalstatic id="modalEtiqueta"
+				on-hide="limpiarFormEtiqueta(formEtiqueta)"> <modal-header
+				title="Ingrese una etiqueta para catalogar los expedientes marcados"></modal-header>
+			<modal-body>
+
+			<div class="form-group"
+				ng-class="{'has-error': formEtiqueta.inputEtiqueta.$error.required && formEtiqueta.inputEtiqueta.$dirty}">
+				<label for="inputEtiqueta">Etiqueta:</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-bars"></i>
+					</div>
+					<input capitalize type="text" id="inputEtiqueta" maxlength="50"
+						ng-required="true" ng-model="etiquetaExpedientes.nombre"
+						name="inputEtiqueta" class="form-control"
+						placeholder="Ejemplo: Perfil 4x4" />
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-danger"
+							ng-disabled="formEtiqueta.$invalid" ng-click="crearEtiqueta()">
+							<i class="fa fa-arrow-right"></i>
+						</button>
+					</div>
+				</div>
+				<div
+					ng-show="formEtiqueta.inputEtiqueta.$error.required && formEtiqueta.inputEtiqueta.$dirty"
+					ng-style="{color:'red'}">La etiqueta es requerida para
+					iniciar el marcado de expedientes</div>
+			</div>
+
+			</modal-body></modal>
+		</form>
+	</section>
+</body>
+</html>

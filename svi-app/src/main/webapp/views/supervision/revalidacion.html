@@ -1,0 +1,473 @@
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+    .dropup{
+        width:48px;
+    }
+    
+    </style>
+    </head>
+    <body>
+        <section class="content-header">
+            <h1>Revalidación de archivos</h1>
+            <ol class="breadcrumb">
+                <li><a> <i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}
+                </a></li>
+                <li class="active">{{breadCrumbs.servicio}}</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div id="popup" ng-bind-html="asignaRevalidacion"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-danger">
+                        <div class="box-header with-border text-center">
+							<h3 class="box-title">Asignar a revalidación</h3>&nbsp;&nbsp;
+							<h5 class="box-title" ng-show="nombreEtiqueta!=null">| &nbsp;Etiqueta: <b>{{nombreEtiqueta}}</b></h5>
+                            
+                        </div>
+                        <div class="box-body">
+
+                            <form name="formRevalidaInformacion" role="form" no-validate>
+
+								<div class="row">
+
+
+
+									<div class="row">
+											<div class="col-md-3 col-md-offset-2">
+													<div class="form-group"
+														ng-class="{'has-error': formConsultaExpediente.comboMarca.$error.required && formConsultaExpediente.comboMarca.$dirty}">
+														<label for="comboPeriodoIncidencia">Marca:</label>
+														<div class="input-group">
+															<div class="input-group-addon">
+																<i class="fa fa-list"></i>
+															</div>
+															<select class="form-control" id="comboMarca"
+																name="comboMarca" select-picker multiple
+																data-actions-box="true"
+																data-selected-text-format="count > 2" 
+																ng-change="filtrarMarcas()"
+																idioma-s2="{{currentLanguage}}" ng-required="false"
+																ng-options="cat.txMarca for cat in catBusqMarca.lista"
+																ng-model="catBusqMarca.valor">										          
+															</select>
+														</div>
+														<div
+															ng-show="formConsultaExpediente.comboMarca.$error.required && formConsultaExpediente.comboMarca.$dirty"
+															ng-style="{color:'red'}">La marca es requerida</div>
+													</div>
+												</div>
+											<div class="col-md-3">
+												<div class="form-group"
+													ng-class="{'has-error': formConsultaExpediente.comboSubMarca.$error.required && formConsultaExpediente.comboSubMarca.$dirty}">
+													<label for="comboSubMarca">Submarca:</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-pencil"></i>
+														</div>
+														<select class="form-control" id="comboSubMarca"
+															name="comboSubMarca" select-picker multiple
+															data-actions-box="true"
+															data-selected-text-format="count > 2" 
+															ng-change="filtrarSubMarcas()"
+															idioma-s2="{{currentLanguage}}" ng-required="false"
+															ng-options="cat.txSubMarca group by cat.txMarca for cat in catBusqSubMarca.lista"
+															ng-model="catBusqSubMarca.valor">
+														</select>
+													</div>
+													<div
+														ng-show="formConsultaExpediente.comboSubMarca.$error.required && formConsultaExpediente.comboSubMarca.$dirty"
+														ng-style="{color:'red'}">Debe de seleccionar al menos un valor</div>
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group"
+													ng-class="{'has-error': formConsultaExpediente.comboPerfil.$error.required && formConsultaExpediente.comboPerfil.$dirty}">
+													<label for="comboPerfil">Perfil:</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-pencil"></i>
+														</div>
+														<select class="form-control" id="comboPerfil"
+															name="comboPerfil" select-picker multiple
+															data-actions-box="true"
+															data-selected-text-format="count > 2" 
+															idioma-s2="{{currentLanguage}}"
+															ng-required="false"
+															ng-options="cat.txPerfil for cat in catBusqPerfil.lista"
+															ng-model="catBusqPerfil.valor">
+														</select>
+													</div>
+													<div
+														ng-show="formConsultaExpediente.comboPerfi.$error.required && formConsultaExpediente.comboPerfi.$dirty"
+														ng-style="{color:'red'}">Debe de seleccionar al menos un valor</div>
+												</div>
+												
+											</div>
+									</div>
+									<div class="row">
+
+											<div class="col-md-3 col-md-offset-4">
+													<div class="form-group">
+														<label>Filtro:</label>
+														<div class="input-group">
+															<switcher class="swTeclo pull-right"
+																id-check="checkTest1"
+																ng-disabled="isDisabled"
+																true-label="Incidencias"
+																false-label="Todos"
+																ng-change="filtrar(!filterCheck, this)"
+																ng-model="filterCheck">
+															</switcher>
+														</div>
+													</div>
+											</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label>&nbsp;</label>
+														<div class="input-group">
+															<button type="button" ng-click="filtrarCombos()" class="btn btn-danger btn-flat">Buscar</button>
+														</div>
+													</div>
+														
+												</div>
+												
+										</div>
+
+                                <div ng-show="tipoBusq.valor == 1" >
+                                    <div dir-paginate="archivoCSV in detalleRevalidacion.lista | orderBy:order:reverse | itemsPerPage: asdfg">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label for="">Archivo:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-list"></i>
+                                                        </div>
+                                                        <input class="form-control" id="inputArchivo" name="inputArchivo" ng-model="archivoCSV.nbArchivoCsv" ng-disabled="true" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">Total Registros:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-list"></i>
+                                                        </div>
+                                                        <input class="form-control" ng-model="archivoCSV.nuRegistros" ng-disabled="true" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label for="">Validador:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-list"></i>
+                                                        </div>
+                                                        <select class="form-control" id="{{archivoCSV.nbArchivoCsv}}" name="{{archivoCSV.nbArchivoCsv}}"
+                                                                select2
+                                                                idioma-s2="{{currentLanguage}}" ng-required="true"
+                                                                ng-change="reajustaListaValidador(archivoCSV.validador, this.archivoCSV)"
+                                                                ng-options="validador.nbValidador for validador in validadores.listaOriginal"
+                                                                ng-model="archivoCSV.validador">
+                                                            <option value="" selected="selected">Seleccione</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div> 
+                                    <div class="row">
+											<div class="col-md-4 col-md-offset-4">
+													<div class="form-group" ng-class="{'has-error': formConsultaIncidencia.inputBusquedaIncidencia.$error.required && formConsultaIncidencia.inputBusquedaIncidencia.$dirty}">
+														<label for="comboMotivoRevalida">*Motivo:</label>
+														<div class="input-group">
+															<div class="input-group-addon">
+																<i class="fa fa-list"></i>
+															</div>
+															<select class="form-control" id="comboMotivoRevalida" name="comboMotivoRevalida"
+																	data-minimum-results-for-search="Infinity" select2
+																	idioma-s2="{{currentLanguage}}" ng-required="true"
+																	ng-options="motivo.nameCat for motivo in catMotivo.lista"
+																	ng-model="catMotivo.valor">
+																<option value="" selected="selected">Seleccione</option>
+															</select>
+														</div>
+													</div>
+										</div>
+                                        <div class="col-md-4 col-md-offset-4">
+                                            <div class="form-group" ng-class="{'has-error': formConsultaIncidencia.inputBusquedaIncidencia.$error.required && formConsultaIncidencia.inputBusquedaIncidencia.$dirty}">
+                                                <label for="comboMotivoRevalida">*Motivo:</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-list"></i>
+                                                    </div>
+                                                    <select class="form-control" id="comboMotivoRevalida" name="comboMotivoRevalida"
+                                                            data-minimum-results-for-search="Infinity" select2
+                                                            idioma-s2="{{currentLanguage}}" ng-required="true"
+                                                            ng-options="motivo.nameCat for motivo in catMotivo.lista"
+                                                            ng-model="catMotivo.valor">
+                                                        <option value="" selected="selected">Seleccione</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 center">
+                                            <button type="button" ng-show="hasPermition" ng-click="revalidar1()" class="btn btn-danger btn-flat">Revalidar</button>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <!--************************************-->
+
+
+
+                    <div ng-show="tipoBusq.valor >= 2">
+							
+						
+						<div class="row centerCol" ng-show="detalleRevalidacion.lista.length >0">
+							<div class="col-md-12">
+								<div class="box box-danger">
+									<div class="box-body table-responsive">
+										<div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+											<table class="table table-striped header-fixed" st-table="gridOptions.data" st-safe-src="rowCollection">
+												<thead>
+													<tr>
+														<th align="center" st-sort="'nuCarril'"><a>CARRIL</a></th>
+														<th align="center" class="sizefixed" st-sort="'nuExpediente'"><a>NO. EXPEDIENTE</a></th>
+														<th align="center" st-sort="'placaDelantera'"><a>PLACA DELANTERA</a></th>
+														<th align="center" st-sort="'entidadDelantera'"><a>ENTIDAD DELANTERA</a></th>
+														<th align="center" st-sort="'placaTrasera'"><a>PLACA TRASERA</a></th>
+														<th align="center" st-sort="'entidadTrasera'"><a>ENTIDAD TRASERA</a></th>
+														<th align="center" st-sort="'perfil'"><a>PERFIL</a></th>
+														<th align="center"><a>CLASIF. EXPEDIENTE</a></th>
+														<th align="center"><a>INCIDENCIA</a></th>
+														<th align="center"> 
+															<input type="checkbox" ng-change="checkAllDetalleArchivos(allCheck)" ng-model="allCheck" class="icheckbox_flat-green" />
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="reg in gridOptions.data | startFrom:(paginationOptions.currentPage-1)*paginationOptions.itemsPerPage | limitTo:paginationOptions.itemsPerPage | filter:filtroBusqueda track by $index">
+														<td align="center">{{ reg.nuCarril }}</td>
+														<td class="sizefixed" align="center">{{ reg.nuExpediente }}</td>
+														<td align="center">{{ reg.placaDelantera }}</td>
+														<td align="center">{{ reg.entidadDelantera }}</td>
+														<td align="center">{{ reg.placaTrasera }}</td>
+														<td align="center">{{ reg.entidadTrasera }}</td>
+														<td align="center">{{ reg.perfil }}</td>
+														<td align="center">
+															<span ng-if="reg.clasificacion == null" class="label" ng-class="{'label-primary':reg.validacion,'label-warning':!reg.validacion}">{{reg.validacion ? "Sin Clasificar" : "En Validación"}}</span>
+															<span ng-if="reg.clasificacion != null" class="label label-success" data-toggle="tooltip" data-placement="top" title="{{reg.clasificacion.nbClasificacion}}">{{reg.validacion ? reg.clasificacion.idClasificacion : "En Validación"}}</span>
+														</td>
+														<td align="center">
+															<span ng-if="reg.inconsistencia.length == 0" class="label" ng-class="{'label-success':reg.validacion,'label-warning':!reg.validacion}">{{reg.validacion ? "Ninguno" : "En Validacion"}}</span>
+															<popover ng-if="reg.inconsistencia.length > 0" id="popoverBootstrap" class="btn btn-danger fullWidth" style="z-index:2000;" idioma-pb="{{currentLanguage}}"
+															options="opcionesPopover" placement="right" title="Incidencias" data-html="true" data-content="{{detalleRegistrosIncidencias(reg.inconsistencia)}}">
+																{{reg.validacion ? reg.inconsistencia.length : "En Validación"}}
+															</popover>
+														</td>
+														<td class="center">
+															<input type="checkbox" ng-change="checkDetalleArchivos(reg.idRegistroCsv, reg.stPreSeleccion)" ng-model="reg.stPreSeleccion" class="icheckbox_flat-green" />
+														</td>
+													</tr>
+													<tr ng-if="(gridOptions.data | filter:filtroBusqueda).length < 1">
+														<td colspan="5" class="text-center">
+															<h4>No se encontraron coincidencias</h4>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="container-fluids">
+												<div class="fixed-table-pagination">
+													<div class=" pull-left pagination-detail">
+														<span class="pagination-info">
+															Mostrar
+															<span class="page-list">
+																<span class="btn-group dropup"> 
+																	<select select2
+																			id="itemsOnPageSelect2"
+																			data-minimum-results-for-search="Infinity"
+																			class="form-control input-sm"
+																			ng-init="paginationOptions.itemsPerPage = '10'"
+																			ng-model="paginationOptions.itemsPerPage"
+																			ng-change="reloadGrid()">
+																				<option>10</option>
+																				<option>25</option>
+																				<option>50</option>
+																				<option>75</option>
+																	</select>
+																</span>
+																Registros 
+															</span> 
+														</span>
+													</div>
+													<div class="pull-right">
+														<grid-pagination max-size="5" boundary-links="true"
+															total-items="paginationOptions.totalItems"
+															ng-model="paginationOptions.currentPage"
+															ng-change="reloadGrid()"
+															items-per-page="paginationOptions.itemsPerPage"></grid-pagination>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 center">
+								<button type="button" ng-show="hasPermition" ng-click="openModalPreparacion()" class="btn btn-danger btn-flat">Agregar a Revalidacion</button>
+							</div>
+						</div>
+                    </div>
+                    
+
+
+
+
+                                
+                            </form>
+                            <div class="row">
+                                <div class="col-md-12 left">
+                                    <button type="button" ng-click="regresar()" class="btn btn-danger btn-flat">Regresar</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+           
+        </section>
+    </body>
+    </html>
+
+
+<modal visible="showModalAgregarRevalidacion" size-modal="60%" noescape modalstatic>
+    <modal-header title="Agregar a Revalidación"></modal-header>
+    <modal-body>
+			<!-- hey you: {{listPreparacionValidar.lista.length}} -->
+<!-- 				<div class="box-header row"> -->
+<!-- 					<div class="col-md-6 col-xs-12"> -->
+<!-- 						<h3 class="box-title">Asignaciones</h3> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<div class="row">
+	<form name="formRevalidaInformacion" role="form" no-validate>
+		<div class="col-md-5 col-md-offset-1 center">
+				<div class="form-group" ng-class="{'has-error': formRevalidaInformacion.comboMotivoRevalida.$error.required && formRevalidaInformacion.comboMotivoRevalida.$dirty}">
+					
+					<label for="comboMotivoRevalida">*Motivo CSV:</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="fa fa-list"></i>
+						</div>
+						<select class="form-control" id="comboMotivoRevalida" name="comboMotivoRevalida"
+								select2
+								idioma-s2="{{currentLanguage}}" ng-required="true"
+								ng-disabled="copiaDetalleRevalidacion.lista.length == 0"
+								ng-options="motivo.nameCat for motivo in catMotivo.lista"
+								ng-model="catMotivo.valor">
+							<option value="" selected="selected">Seleccione</option>
+						</select>
+					</div>
+				</div>
+			</div> 
+		<div class="col-md-5 center">
+				<div class="form-group" ng-class="{'has-error': formRevalidaInformacion.comboRevalidaValidador.$error.required && formRevalidaInformacion.comboRevalidaValidador.$dirty}">
+					
+					<label for="comboRevalidaValidador">*Validador CSV:</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="fa fa-list"></i>
+						</div>
+						<select class="form-control" id="comboRevalidaValidador" name="comboRevalidaValidador"
+								select2
+								idioma-s2="{{currentLanguage}}" ng-required="true"
+								ng-disabled="copiaDetalleRevalidacion.lista.length == 0"
+								ng-options="validador.nbValidador for validador in validadores.listaOriginal"
+								ng-model="detalleRevalidacion.validador">
+							<option value="" selected="selected">Seleccione</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div  class="col-md-10 center col-md-offset-1 listgroupex" >
+					<table ng-if="listPreparacionValidar.lista.length>0" class="table table-striped header-fixed" st-safe-src="rowCollection">
+							<thead>
+								<tr>
+									<th align="center"><a>#</a></th>
+									<th align="center"><a>Motivo</a></th>
+									<th align="center"><a>Cantidad Expedientes</a></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="registro in listPreparacionValidar.lista">
+									<td align="center">{{$index+1}}</td>
+									<td align="center">{{ registro.idmotivo.nameCat }}</td>
+									<td align="center">{{ registro.listaRegistros.length }}</td>
+								</tr>
+							</tbody>
+					</table> 	
+			</div>
+			<div ng-show="contnewpreparacion&&infoGrupo.total > 0">
+						
+					<div class="col-md-5 col-md-offset-1">
+							<div class="form-group" ng-class="{'has-error': formRevalidaInformacion.comboMotivoRevalida2.$error.required && formRevalidaInformacion.comboMotivoRevalida2.$dirty}">
+								<label for="comboMotivoRevalida2">*Motivo del grupo Expedientes:</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-list"></i>
+									</div>
+									<select class="form-control" id="comboMotivoRevalida2" name="comboMotivoRevalida2"
+											data-minimum-results-for-search="Infinity" select2
+											idioma-s2="{{currentLanguage}}" ng-required="true"
+											ng-disabled="copiaDetalleRevalidacion.lista.length == 0"
+											ng-options="motivo.nameCat for motivo in catMotivo.lista"
+											ng-model="catMotivo.valor2">
+										<option value="" selected="selected">Seleccione</option>
+									</select>
+								</div>
+							</div>
+					</div> 
+					<div class="col-md-5 ">
+								<div class="form-group" >
+									<label for="">Total Expedientes:</label>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-list"></i>
+										</div>
+										<input type="text" class="form-control" ng-model="infoGrupo.total" disabled>
+							
+									</div>
+								</div>
+					</div>
+			</div>
+
+
+		
+		<div class="row">
+			
+				<div  class="col-md-6 col-md-offset-3 center">
+					<button ng-show="contnewpreparacion && infoGrupo.total > 0 && hasPermition" ng-click="preparacionValidacion()" class="btn btn-danger btn-flat">Agregar a Revalidacion</button>
+					<button ng-if="listPreparacionValidar.lista.length > 0 && hasPermition" type="button" ng-click="revalidar1()" class="btn btn-danger btn-flat">Enviar a Revalidación</button>
+				</div>
+		</div>
+		</form>
+		
+		
+	</div>
+        
+    </modal-body>
+</modal> 

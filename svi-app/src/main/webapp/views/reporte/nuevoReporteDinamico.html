@@ -1,0 +1,1553 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>Reportes</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Administración</a></li>
+			<li class="active">Nuevo</li>
+		</ol>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<div align="center">
+							<h3 class="box-title">Datos del Reporte</h3>
+							<div class="box-tools pull-right">
+								<button id="x" type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="col-md-12">
+							<form name="altaRep" novalidate role="form">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{'has-error': altaRep.tipoReporte.$invalid && altaRep.tipoReporte.$dirty}">
+											<label>*Tipo de Reporte</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-list-ul"></i>
+												</div>
+												<select class="form-control" select2
+													ng-required="validacionRequire"
+													data-minimum-results-for-search="Infinity"
+													idioma-s2="{{currentLanguage}}"
+													ng-model="reportesTaqVO.tipoReporte" id="tipoReporte"
+													name="tipoReporte"
+													ng-options="tr as tr.nbTipoReporte for tr in tiposReportes track by tr.idTipoReporte">
+													<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+														| translate}}</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaRep.tipoReporte.$error.required && altaRep.tipoReporte.$dirty"
+												ng-style="{color:'red'}">El tipo de reporte es
+												requerido</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{ 'has-error' : altaRep.nbReporte.$invalid && !altaRep.nbReporte.$pristine }">
+											<div align="left">
+												<label>*Nombre del Reporte</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-file-excel-o"></i></span> <input type="text"
+													ng-model="reportesTaqVO.nbReporte" name="nbReporte"
+													id="nbReporte" class="form-control"
+													ng-required="validacionRequire" maxlength="50">
+											</div>
+											<div
+												ng-show="altaRep.nbReporte.$invalid && !altaRep.nbReporte.$pristine"
+												class="help-block text-left">El nombre del reporte es
+												requerido</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group"
+													ng-class="{ 'has-error' : altaRep.txReporte.$invalid && !altaRep.txReporte.$pristine }">
+													<div align="left">
+														<label>*Descripción del Reporte</label>
+													</div>
+													<div class="input-group">
+														<span class="input-group-addon"><i
+															class="fa fa-info-circle"></i></span>
+														<textarea ng-model="reportesTaqVO.txReporte"
+															name="txReporte" id="txReporte" class="form-control"
+															ng-required="validacionRequire" maxlength="3000"
+															style="resize: inherit;"></textarea>
+													</div>
+													<div
+														ng-show="altaRep.txReporte.$invalid && !altaRep.txReporte.$pristine"
+														class="help-block text-left">La descripción es
+														requerido</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group"
+													ng-class="{'has-error': altaRep.tipoTitulo.$invalid && altaRep.tipoTitulo.$dirty}">
+													<label>*Formato de Columnas</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-font"></i>
+														</div>
+														<select class="form-control" select2
+															data-minimum-results-for-search="Infinity"
+															idioma-s2="{{currentLanguage}}"
+															ng-model="reportesTaqVO.tipoTitulo" name="tipoTitulo"
+															id="tipoTitulo" ng-required="validacionRequire"
+															ng-change="cambiaTipoTitulo(reportesTaqVO.tipoTitulo)"
+															ng-options="tt as tt.nbTipoTitulo for tt in tipoTitulo track by tt.idTipoTitulo">
+															<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+																| translate}}</option>
+														</select>
+													</div>
+													<div
+														ng-show="altaRep.tipoTitulo.$error.required && altaRep.tipoTitulo.$dirty"
+														ng-style="{color:'red'}">El tipo de título es
+														requerido</div>
+												</div>
+											</div>
+											<div class="col-md-6" ng-show="formatosTMP != undefined">
+												<div class="form-group"
+													ng-class="{'has-error': altaRep.reporteFormatoTMP.$invalid && altaRep.reporteFormatoTMP.$dirty}">
+													<label>*Formatos de Descarga</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-file"></i>
+														</div>
+														<select class="form-control" select-picker multiple
+															idioma-sp="{{currentLanguage}}" data-actions-box="true"
+															data-selected-text-format="count > 2"
+															data-max-options="3"
+															ng-model="reportesTaqVO.reporteFormato"
+															name="reporteFormatoTMP" id="reporteFormatoTMP"
+															ng-required="validacionRequire"
+															ng-options="tf.id as tf.desc for tf in formatosTMP">
+														</select>
+													</div>
+													<div
+														ng-show="altaRep.reporteFormatoTMP.$error.required && altaRep.reporteFormatoTMP.$dirty"
+														ng-style="{color:'red'}">El formato es requerido</div>
+												</div>
+											</div>
+											<div class="col-md-6" ng-show="formatosTMP == undefined">
+												<div class="form-group"
+													ng-class="{'has-error': altaRep.reporteFormato.$invalid && altaRep.reporteFormato.$dirty}">
+													<label>*Formatos de Descarga</label>
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-file"></i>
+														</div>
+														<select class="form-control" select-picker multiple
+															idioma-sp="{{currentLanguage}}" data-actions-box="true"
+															data-selected-text-format="count > 2"
+															data-max-options="3"
+															ng-model="reportesTaqVO.reporteFormato"
+															name="reporteFormato" id="reporteFormato"
+															ng-required="validacionRequire"
+															ng-options="tf as tf.nbFormato for tf in formatos">
+														</select>
+														<!--
+														ng-options="tf as tf.nbFormato for tf in formatos"
+														 ng-options="tf.id as tf.desc for tf in formatosTMP" -->
+													</div>
+													<div
+														ng-show="altaRep.reporteFormato.$error.required && altaRep.reporteFormato.$dirty"
+														ng-style="{color:'red'}">El formato es requerido</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{ 'has-error' : altaRep.scriptSelect.$invalid && !altaRep.scriptSelect.$pristine }">
+											<div align="left">
+												<label>*Script Select <span data-toggle="tooltip"
+													data-placement="top" data-html="true"
+													data-original-title="Introducir las columnas<br/>
+																			que contendrá el reporte en el orden correspondiente<br/>
+																		Ejemplo: <br/>columna1 [ALIAS1], columna2 [ALIAS2],...columnaN [ALIASn]">
+														<i class="fa fa-question-circle"></i>
+												</span></label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-database"></i></span>
+												<textarea name="scriptSelect" id="scriptSelect" rows="6"
+													class="form-control" ng-model="reportesTaqVO.scriptSelect"
+													ng-required="validacionRequire" style="resize: inherit;"
+													ng-disabled="edicionQuery.editable"></textarea>
+											</div>
+											<div
+												ng-show="altaRep.scriptSelect.$invalid && !altaRep.scriptSelect.$pristine"
+												class="help-block text-left">El script select es
+												requerido</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{ 'has-error' : altaRep.scritFrom.$invalid && !altaRep.scritFrom.$pristine }">
+											<div align="left">
+												<label>*Script From<span data-toggle="tooltip"
+													data-placement="top" data-html="true"
+													data-original-title="Introducir el nombre de la tabla<br/>y/o los joins requeridos<br/>Ejemplo 1: Tabla1 t1<br/>
+																			Ejemplo 2: Tabla1 t1 join TablaN tn on t1.columna1 = tn.columna1">
+														<i class="fa fa-question-circle"></i>
+												</span></label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-database"></i></span>
+												<textarea name="scritFrom" id="scritFrom" rows="6"
+													class="form-control" ng-model="reportesTaqVO.scritFrom"
+													ng-required="validacionRequire" style="resize: inherit;"
+													ng-disabled="edicionQuery.editable"></textarea>
+											</div>
+											<div
+												ng-show="altaRep.scritFrom.$invalid && !altaRep.scritFrom.$pristine"
+												class="help-block text-left">El script from es
+												requerido</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{ 'has-error' : altaRep.scriptWhere.$invalid && !altaRep.scriptWhere.$pristine }">
+											<div align="left">
+												<label>*Script Where<span data-toggle="tooltip"
+													data-placement="top" data-html="true"
+													data-original-title="Introducir las restricciones correspondientes<br/>
+														los valores para los parámetros con la<br/> siguiente nomenclatura #{miParametro}<br/> 
+														y/o los ordenamientos requeridos<br/>
+														Ejemplo: columna1='#{miParametro1}' AND columna2=#{miParametro2}<br/> order by columna1 desc<br/>">
+														<i class="fa fa-question-circle"></i>
+												</span></label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-database"></i></span>
+												<textarea name="scriptWhere" id="scriptWhere" rows="6"
+													class="form-control" ng-model="reportesTaqVO.scriptWhere"
+													ng-required="validacionRequire" style="resize: inherit;"
+													ng-disabled="edicionQuery.editable"></textarea>
+											</div>
+											<div
+												ng-show="altaRep.scriptWhere.$invalid && !altaRep.scriptWhere.$pristine"
+												class="help-block text-left">El script where es
+												requerido</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="row"
+									ng-if="arrayParametros.length > 0 && paramConfig">
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{'has-error': altaRep.tipoAgrupacion.$invalid && altaRep.tipoAgrupacion.$dirty}">
+											<label>*Tipo de Paginación<span data-toggle="tooltip"
+												data-placement="top" data-html="true"
+												data-original-title="Se habilitará después de <br/>validar el script correctamente">
+													<i class="fa fa-question-circle"></i>
+											</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-columns"></i>
+												</div>
+												<select class="form-control" select2
+													data-minimum-results-for-search="Infinity"
+													ng-disabled="arrayParametros.length <= 0 && !paramConfig"
+													idioma-s2="{{currentLanguage}}"
+													ng-model="reportesTaqVO.tipoAgrupacion"
+													name="tipoAgrupacion" id="tipoAgrupacion"
+													ng-required="arrayParametros.length > 0 && paramConfig"
+													ng-options="tt as tt.cdTipoAgrupacion for tt in tipoAgrupacion track by tt.idTipoAgrupacion"
+													ng-change="comprobarTipoPaginacion(reportesTaqVO.tipoAgrupacion)">
+													<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+														| translate}}</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaRep.tipoAgrupacion.$error.required && altaRep.tipoAgrupacion.$dirty"
+												ng-style="{color:'red'}">El tipo de agrupación es
+												requerido</div>
+										</div>
+									</div>
+									<div class="col-md-6" ng-if="columnasMetadata.length > 0">
+										<div class="form-group"
+											ng-class="{'has-error': altaRep.txColumnaPaginacionHojas.$invalid && altaRep.txColumnaPaginacionHojas.$dirty}">
+											<label>*Columna de Paginación</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-columns"></i>
+												</div>
+												<select class="form-control" select2
+													data-minimum-results-for-search="Infinity"
+													idioma-s2="{{currentLanguage}}"
+													ng-model="reportesTaqVO.txColumnaPaginacionHojas"
+													name="txColumnaPaginacionHojas"
+													id="txColumnaPaginacionHojas"
+													ng-required="validacionRequire && reportesTaqVO.tipoAgrupacion.idTipoAgrupacion == 2"
+													ng-disabled="reportesTaqVO.tipoAgrupacion.idTipoAgrupacion != 2"
+													ng-options="c for c in columnasMetadata">
+													<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+														| translate}}</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaRep.txColumnaPaginacionHojas.$error.required && altaRep.txColumnaPaginacionHojas.$dirty"
+												ng-style="{color:'red'}">El tipo de agrupación es
+												requerido</div>
+										</div>
+
+									</div>
+								</div>
+
+
+								<div class="row" ng-if="habilitarPaginacion">
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{'has-error': altaRep.tipoAgrupacion.$invalid && altaRep.tipoAgrupacion.$dirty}">
+											<label>*Tipo de Paginación<span data-toggle="tooltip"
+												data-placement="top" data-html="true"
+												data-original-title="Se habilitará después de <br/>validar el script correctamente">
+													<i class="fa fa-question-circle"></i>
+											</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-columns"></i>
+												</div>
+												<select class="form-control" select2
+													data-minimum-results-for-search="Infinity"
+													ng-disabled="habilitarPaginacion"
+													idioma-s2="{{currentLanguage}}"
+													ng-model="reportesTaqVO.tipoAgrupacion"
+													name="tipoAgrupacion" id="tipoAgrupacion"
+													ng-required="habilitarPaginacion"
+													ng-options="tt as tt.cdTipoAgrupacion for tt in tipoAgrupacion track by tt.idTipoAgrupacion"
+													ng-change="comprobarTipoPaginacion(reportesTaqVO.tipoAgrupacion)">
+													<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+														| translate}}</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaRep.tipoAgrupacion.$error.required && altaRep.tipoAgrupacion.$dirty"
+												ng-style="{color:'red'}">El tipo de agrupación es
+												requerido</div>
+										</div>
+									</div>
+									<div class="col-md-6" ng-if="columnasMetadata.length > 0">
+										<div class="form-group"
+											ng-class="{'has-error': altaRep.txColumnaPaginacionHojas.$invalid && altaRep.txColumnaPaginacionHojas.$dirty}">
+											<label>*Columna de Paginación</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-columns"></i>
+												</div>
+												<select class="form-control" select2
+													data-minimum-results-for-search="Infinity"
+													idioma-s2="{{currentLanguage}}"
+													ng-model="reportesTaqVO.txColumnaPaginacionHojas"
+													name="txColumnaPaginacionHojas"
+													id="txColumnaPaginacionHojas"
+													ng-required="validacionRequire && reportesTaqVO.tipoAgrupacion.idTipoAgrupacion == 2"
+													ng-disabled="reportesTaqVO.tipoAgrupacion.idTipoAgrupacion != 2"
+													ng-options="c for c in columnasMetadata">
+													<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+														| translate}}</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaRep.txColumnaPaginacionHojas.$error.required && altaRep.txColumnaPaginacionHojas.$dirty"
+												ng-style="{color:'red'}">El tipo de agrupación es
+												requerido</div>
+										</div>
+
+									</div>
+								</div>
+
+
+
+								<div class="row" ng-if="!edicionQuery.editable">
+									<div class="col-md-12 text-center">
+										<button type="button" class="btn btn-danger"
+											ng-click="checkParams(reportesTaqVO, altaRep)">Validar
+											Script</button>
+
+										<button type="button" class="btn btn-danger"
+											ng-if="!objetoEdicion.sinParamsEdicion && !paramConfig && habilitarPaginacion && params.length <= 0"
+											ng-click="guardaReporteSinParams(altaRep)">Guardar
+											Reporte</button>
+
+										<button type="button" class="btn btn-danger"
+											ng-if="objetoEdicion.sinParamsEdicion && !paramConfig && habilitarPaginacion && params.length <= 0"
+											ng-click="guardaReporte(params, confParams, altaRep)">Guardar
+											Reporte</button>
+
+									</div>
+								</div>
+
+								<div class="row" ng-if="edicionQuery.editable">
+									<div class="col-md-12 text-center">
+										<button type="button" class="btn btn-danger"
+											ng-click="editarQuery(params)">Editar Script</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div ng-if="columnasMetadata.length > 0">
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Empieza box -->
+					<div class="box box-danger">
+						<!-- Empieza cabecera -->
+						<div class="box-header with-border">
+							<div align="center">
+								<h3 class="box-title">Layout del Reporte</h3>
+								<div class="box-tools pull-right">
+									<button id="x" type="button" class="btn btn-box-tool"
+										data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<!-- Termina cabecera -->
+
+						<!-- Empieza cuerpo -->
+						<div class="box-body">
+							<div class="col-md-12">
+								<div grid-data id='test' grid-options="gridOptions"
+									grid-actions="gridActions">
+									<div class="table-responsive"
+										ng-class="{'gridOptionsTable': columnasMetadata.length > 10}">
+										<table class="table table-striped header-fixed"
+											st-table="gridOptions.data" st-safe-src="rowCollection">
+											<thead>
+												<tr>
+													<th class="wrap-text"
+														ng-repeat="column in columnasMetadata"><a>{{column}}</a></th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div ng-if="arrayParametros.length > 0 && paramConfig"
+			ng-click="mostrarAvisoValidacion()"
+			ng-class="{'disabled': edicionQuery.banderaValidacion}">
+			<fieldset ng-disabled="edicionQuery.banderaValidacion"
+				style="border: none; margin: 0; padding: 0">
+				<div class="row">
+					<div class="col-md-12">
+						<!-- Empieza box -->
+						<div class="box box-danger">
+							<!-- Empieza cabecera -->
+							<div class="box-header with-border">
+								<div align="center">
+									<h3 class="box-title">Configuración de Parámetros</h3>
+									<div class="box-tools pull-right">
+										<button id="x" type="button" class="btn btn-box-tool"
+											data-widget="collapse">
+											<i class="fa fa-minus"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<!-- Termina cabecera -->
+
+							<!-- Empieza cuerpo -->
+							<div class="box-body">
+								<div class="col-md-12">
+									<form name="confParams" novalidate>
+										<div class="row">
+											<uib-accordion close-others="true">
+											<div uib-accordion-group class="panel-default"
+												is-open="stOpenAcor" ng-repeat="param in params"
+												is-disabled="edicionQuery.banderaValidacion">
+												<uib-accordion-heading> {{'Parámetro
+												'}} {{$index + 1}} {{': ' +param.cdParametro}}<i
+													class="pull-right glyphicon"
+													ng-class="{'glyphicon-chevron-down': stOpenAcor, 'glyphicon-chevron-right': !stOpenAcor}"></i>
+												</uib-accordion-heading>
+
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group"
+															ng-class="{ 'has-error' : confParams.{{ 'nbParametro' + $index }}.$invalid && !confParams.{{ 'nbParametro' + $index }}.$pristine }">
+															<label for="{{ 'nbParametro' + $index }}">*Nombre
+																del Parámetro</label>
+															<div class="input-group">
+																<span class="input-group-addon"> <i
+																	class="fa fa-clipboard"></i></span> <input type="text"
+																	ng-model="param.nbParametro"
+																	name="{{ 'nbParametro' + $index }}"
+																	id="{{ 'nbParametro' + $index }}" class="form-control"
+																	required>
+															</div>
+															<div
+																ng-show="confParams.{{ 'nbParametro' + $index }}.$invalid && !confParams.{{ 'nbParametro' + $index }}.$pristine"
+																class="help-block text-left">El nombre de
+																parámetro es requerido</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group"
+															ng-class="{ 'has-error' : confParams.{{ 'txParametro' + $index }}.$invalid && !confParams.{{ 'txParametro' + $index }}.$pristine }">
+															<label for="{{ 'txParametro' + $index }}">*Descripción
+																del Parámetro</label>
+															<div class="input-group">
+																<span class="input-group-addon"> <i
+																	class="fa fa-info-circle"></i></span>
+																<textarea ng-model="param.txParametro"
+																	name="{{ 'txParametro' + $index }}"
+																	id="{{ 'txParametro' + $index }}" class="form-control"
+																	maxlength="1000" style="resize: inherit;" required></textarea>
+															</div>
+															<div
+																ng-show="confParams.{{ 'txParametro' + $index }}.$invalid && !confParams.{{ 'txParametro' + $index }}.$pristine"
+																class="help-block text-left">La descripción es
+																requerida</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group"
+															ng-class="{ 'has-error' : confParams.{{ 'nuOrden' + $index }}.$invalid && !confParams.{{ 'nuOrden' + $index }}.$pristine }">
+															<label for="{{ 'nuOrden' + $index }}">*Orden de
+																Parámetro<span data-toggle="tooltip"
+																data-placement="top" data-html="true"
+																data-original-title="Orden que tendrá el componente en el <br/>
+																					formulario de consulta">
+																	<i class="fa fa-question-circle"></i>
+															</span>
+															</label>
+															<div class="input-group">
+																<span class="input-group-addon"> <i
+																	class="fa fa-sort-numeric-asc"></i></span> <input
+																	type="number" ng-model="param.nuOrden"
+																	min="{{nuOrden.minAmbos}}"
+																	max="{{nuOrden.maxNuOrdenParam}}" limit-to-max
+																	name="{{ 'nuOrden' + $index }}"
+																	id="{{ 'nuOrden' + $index }}" class="form-control"
+																	required>
+															</div>
+															<div
+																ng-show="confParams.{{ 'nuOrden' + $index }}.$invalid && !confParams.{{ 'nuOrden' + $index }}.$pristine"
+																class="help-block text-left">El orden del
+																parámetro es requerido</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group"
+															ng-class="{ 'has-error' : confParams.{{ 'tipoParametro' + $index }}.$invalid && !confParams.{{ 'tipoParametro' + $index }}.$pristine }">
+															<label for="{{ 'tipoParametro' + $index }}">*Tipo
+																de Parámetro</label>
+															<div class="input-group">
+																<div class="input-group-addon">
+																	<i class="fa fa-list-ul"></i>
+																</div>
+																<select class="form-control" select2
+																	data-minimum-results-for-search="Infinity"
+																	idioma-s2="{{currentLanguage}}"
+																	ng-model="param.tipoParametro"
+																	name="{{ 'tipoParametro' + $index }}"
+																	id="{{ 'tipoParametro' + $index }}" required
+																	ng-options="tp as tp.nbTipoParametro for tp in parametros track by tp.idTipoParametro"
+																	ng-change="filtroTipoComponente(param.tipoParametro,$index, param, confParams)">
+																	<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+																		| translate}}</option>
+																</select>
+															</div>
+															<div
+																ng-show="confParams.{{ 'tipoParametro' + $index }}.$invalid && !confParams.{{ 'tipoParametro' + $index }}.$pristine"
+																class="help-block text-left">El tipo de parámetro
+																es requerido</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group"
+															ng-class="{ 'has-error' : confParams.{{ 'componente' + $index }}.$invalid && !confParams.{{ 'componente' + $index }}.$pristine }">
+															<label for="{{ 'componente' + $index }}">*Tipo de
+																Componente</label>
+															<div class="input-group">
+																<div class="input-group-addon">
+																	<i class="fa fa-list-ul"></i>
+																</div>
+																<select class="form-control" select2
+																	data-minimum-results-for-search="Infinity"
+																	idioma-s2="{{currentLanguage}}"
+																	ng-model="param.componente"
+																	name="{{ 'componente' + $index }}"
+																	id="{{ 'componente' + $index }}" required
+																	ng-options="tc as tc.nbComponente for tc in relacionTipoParamsCompsFiltro{{$index}} track by tc.idComponente"
+																	ng-change="filtroCompPropiedad(param.componente, $index, param)"
+																	ng-disabled="param.tipoParametro == undefined">
+																	<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+																		| translate}}</option>
+																</select>
+															</div>
+															<div
+																ng-show="confParams.{{ 'componente' + $index }}.$invalid && !confParams.{{ 'componente' + $index }}.$pristine"
+																class="help-block text-left">El tipo de componente
+																es requerido</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label>&nbsp;&nbsp;&nbsp;</label>
+															<div class="input-group">
+																<button type="button" class="btn btn-danger"
+																	ng-disabled="param.componente == undefined || param.tipoParametro == undefined"
+																	ng-click="agregarValoresProp($index, param.cdParametro)">Propiedades
+																	de Componente</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-2">
+														<div class="form-group">
+															<label for="{{ 'stMultipleValores' + $index }}"
+																class="labelCheck noneSelectedUser">*Valores
+																Múltiples<span data-toggle="tooltip"
+																data-placement="top" data-html="true"
+																data-original-title="Solo aplica para los parámetros <br/> que tienen la cláusula IN">
+																	<i class="fa fa-question-circle"></i>
+															</span>
+															</label>
+															<div class="input-group">
+																<switcher class="swTeclo"
+																	id-check="{{ 'stMultipleValores' + $index }}"
+																	ng-model="param.stMultipleValores"
+																	ng-disabled="isDisabled"
+																	ng-change="onChange(newValue, oldValue)"
+																	true-label="<i class='fa fa-check-circle'></i>"
+																	true-value="1"
+																	false-label="<i class='fa fa-times-circle'></i>"
+																	false-value="0"> </switcher>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-2">
+														<div class="form-group">
+															<label for="{{ 'stIsCatalogo' + $index }}"
+																class="labelCheck noneSelectedUser">*Catálogo<span
+																data-toggle="tooltip" data-placement="top"
+																data-html="true"
+																data-original-title="Configurar el catálogo que estará asociado al parámetro">
+																	<i class="fa fa-question-circle"></i>
+															</span></label>
+															<div class="input-group">
+																<switcher class="swTeclo"
+																	id-check="{{ 'stIsCatalogo' + $index }}"
+																	ng-model="param.stIsCatalogo"
+																	ng-change="paramTipoCatalogo(newValue, oldValue,param)"
+																	ng-disabled="param.tipoParametro.cdTipoParametro != 'C'"
+																	true-label="<i class='fa fa-check-circle'></i>"
+																	true-value="1"
+																	false-label="<i class='fa fa-times-circle'></i>"
+																	false-value="0"> </switcher>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-2"
+														ng-if="cambiosEfectuadosTipCat[param.cdParametro] && param.stIsCatalogo == 1">
+														<div class="form-group">
+															<label>&nbsp;&nbsp;&nbsp;</label>
+															<div class="input-group">
+																<button type="button" class="btn btn-danger"
+																	ng-click="modificarConfParamTipCar(param)">Modificar</button>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for="{{ 'txAyuda' + $index }}">Ayuda en
+																Tooltip<span data-toggle="tooltip" data-placement="top"
+																data-html="true"
+																data-original-title="Texto de ayuda que aparecerá junto <br/>
+																					al componente en el formulario de búsqueda">
+																	<i class="fa fa-question-circle"></i>
+															</span>
+															</label>
+															<div class="input-group">
+																<span class="input-group-addon"> <i
+																	class="fa fa-info-circle"></i></span>
+																<textarea ng-model="param.txAyuda"
+																	name="{{ 'txAyuda' + $index }}"
+																	id="{{ 'txAyuda' + $index }}" class="form-control"
+																	maxlength="1000" style="resize: inherit;"></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											</uib-accordion>
+										</div>
+										<div class="row"
+											ng-if="parametrosDependientes.paramestrosTipoCatalogo.length >= 2">
+											<div class="col-md-4">
+												<button type="button" class="btn btn-danger"
+													ng-click="configurarParamDependientes(parametrosDependientes,reportesTaqVO.dependenciasSelect)">Dependencias
+													de Catálogos</button>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12 text-center">
+												<button type="button" class="btn btn-danger"
+													ng-click="guardaReporte(params, confParams, altaRep)">Guardar
+													Reporte</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<!-- Termina cuerpo -->
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
+
+	<form name="testQueryForm" novalidate>
+		<modal visible="showModalScript" size-modal="md" noescape modalstatic>
+		<modal-header title="Test Script" closeable="false"></modal-header> <modal-body>
+		<div class="row">
+			<div class="col-md-12">
+				<h5>Favor de introducir los valores de prueba de los parámetros
+					para ejecutar el test.</h5>
+			</div>
+		</div>
+		<table id="tableArrayParam"
+			class="table table-striped table-hover header-fixed">
+			<thead>
+				<tr>
+					<th>Parámetro</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="arrayParam in arrayParametros track by $index">
+					<td class="center">{{arrayParam.cdParametro}}</td>
+					<td>
+						<div class="form-group"
+							ng-class="{ 'has-error' : testQueryForm.{{ 'paramValue' + $index }}.$invalid && !testQueryForm.{{ 'paramValue' + $index }}.$pristine }">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-question"></i></span>
+								<input type="text" ng-model="paramValue[$index]"
+									name="{{ 'paramValue' + $index }}"
+									id="{{ 'paramValue' + $index }}" class="form-control" required>
+							</div>
+							<div
+								ng-show="testQueryForm.{{ 'paramValue' + $index }}.$invalid && !testQueryForm.{{ 'paramValue' + $index }}.$pristine"
+								class="help-block text-left">El valor para
+								{{arrayParam.cdParametro}} es requerido</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		</div>
+		<div class="row">
+			<div
+				ng-show="showMensajeTest != undefined && !resultadoTestQuery.stResult"
+				class="col-md-offset-1 col-md-10 alert alert-teclo"
+				style="margin-bottom: 0">
+				<strong>ERROR: </strong>{{resultadoTestQuery.mensaje}}.
+			</div>
+			<div
+				ng-show="showMensajeTest != undefined && resultadoTestQuery.stResult"
+				class="col-md-offset-1 col-md-10 alert alert-teclo-succes"
+				style="margin-bottom: 0">
+				<strong>La consulta se ejecutó correctamente.</strong>
+			</div>
+		</div>
+		</modal-body> <modal-footer>
+		<button class="btn btn-danger" ng-click="cerrandoTestScript()">Cerrar</button>
+		<button class="btn btn-danger"
+			ng-click="testQuery(arrayParametros, paramValue)">Ejecutar</button>
+		</modal-footer> </modal>
+	</form>
+
+
+	<form name="modalCompo" novalidate role="form">
+		<modal visible="modalConfigParam" size-modal="lg" noescape modalstatic>
+		<modal-header closeable="false" title="Propiedades del Componente"></modal-header>
+		<modal-body>
+		<div class="row" ng-if="listaCompPropModal.length > 0">
+			<div class="box-body table-responsive no-padding">
+				<table id="garantiasTable" class="table table-hover header-fixed">
+					<thead>
+						<tr>
+							<th class="center">Marcar</th>
+							<th class="center">Nombre</th>
+							<th class="center">Valor</th>
+							<th class="center">Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="center"><label
+								for="objCheck[parametroActualModal]"
+								class="labelCheck noneSelectedUser"> <span
+									ng-if="!objCheck[parametroActualModal]">Marcar Todos</span> <span
+									ng-if="objCheck[parametroActualModal]">Desmarcar Todos</span>
+							</label>
+								<div>
+									<switcher class="swTeclo"
+										id-check="objCheck[parametroActualModal]"
+										ng-model="objCheck[parametroActualModal]"
+										ng-change="checkProp('ALL',parametroActualModal)"
+										true-value="true" false-value="false"> </switcher>
+								</div></td>
+							<td class="center"></td>
+							<td class="center"></td>
+							<td class="center"></td>
+						</tr>
+						<tr ng-repeat="r in listaCompPropModal">
+							<td class="center"><switcher class="swTeclo"
+									id-check="prop{{r.idPropiedad}}" ng-model="r.checkedComp"
+									ng-change="checkProp('ONE',parametroActualModal, r, newValue, oldValue)"
+									true-value="true" false-value="false"> </switcher></td>
+							<td class="center">{{r.nbPropiedad}}<br />({{r.nbHtmlPropiedad}})
+							</td>
+							<td class="center" ng-if="r.cdPropiedad != 'QUERY'">
+								<div class="col-md-12">
+									<div class="form-group"
+										ng-class="{ 'has-error' : modalCompo.{{ 'value' + r.idPropiedad }}.$invalid && !modalCompo.{{ 'value' + r.idPropiedad }}.$pristine }">
+										<div class="input-group">
+											<input type="text" ng-model="r.value"
+												name="{{ 'value' + r.idPropiedad }}"
+												id="{{ 'value' + r.idPropiedad }}" class="form-control"
+												maxlength="50"
+												ng-required="r.stValorRequerido == 1 && r.checkedComp"
+												ng-disabled="!r.checkedComp || r.stValorRequerido == 0">
+										</div>
+										<div
+											ng-show="modalCompo.{{ 'value' + r.idPropiedad }}.$invalid && !modalCompo.{{ 'value' + r.idPropiedad }}.$pristine"
+											class="help-block text-left">El valor es requerido</div>
+									</div>
+								</div>
+							</td>
+							<td class="center"
+								ng-if="esListaDoble[parametroActualModal] && r.cdPropiedad == 'QUERY'">
+								<div class="col-md-12">
+									<div class="form-group"
+										ng-class="{ 'has-error' : modalCompo.{{ 'value' + r.idPropiedad }}.$invalid && !modalCompo.{{ 'value' + r.idPropiedad }}.$pristine }">
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list-ul"></i>
+											</div>
+											<select class="form-control" select2
+												data-minimum-results-for-search="Infinity"
+												idioma-s2="{{currentLanguage}}" ng-model="r.value"
+												name="{{ 'value' + r.idPropiedad }}"
+												id="{{ 'value' + r.idPropiedad }}"
+												ng-required="r.stValorRequerido == 1 && r.checkedComp"
+												ng-options="tc.txValor as tc.txCaracter for tc in catCaracteres"
+												ng-disabled="!r.checkedComp || r.stValorRequerido == 0"
+												ng-change="cambioSeparador(r.value, parametroActualModal)">
+												<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+													| translate}}</option>
+											</select>
+										</div>
+										<div
+											ng-show="modalCompo.{{ 'value' + r.idPropiedad }}.$invalid && !modalCompo.{{ 'value' + r.idPropiedad }}.$pristine"
+											class="help-block text-left">Es valor es requerido</div>
+									</div>
+								</div>
+							</td>
+							<td class="center">{{r.txPropiedad}}</td>
+						</tr>
+						<!-- se usará otro renglon para especificar el query de la búsqueda previa -->
+						<tr
+							ng-if="propiedadTipoQuery['requireQuery'+parametroActualModal]">
+							<td colspan="4" class="center">
+								<div class="row">
+									<div class="col-md-10 col-md-offset-1">
+										<div class="form-group"
+											ng-class="{ 'has-error' : modalCompo.{{'query'+parametroActualModal}}.$invalid && !modalCompo.{{'query'+parametroActualModal}}.$pristine || propiedadTipoQuery[parametroActualModal] == undefined}">
+											<div align="left">
+												<label>*Query de Búsqueda Previa</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-info-circle"></i></span>
+												<textarea rows="4"
+													ng-model="propiedadTipoQuery[parametroActualModal]"
+													name="{{'query'+parametroActualModal}}"
+													id="{{'query'+parametroActualModal}}" class="form-control"
+													ng-required="propiedadTipoQuery.requireQuery"
+													maxlength="5000" style="resize: inherit;"></textarea>
+											</div>
+											<div
+												ng-show="modalCompo.{{'query'+parametroActualModal}}.$invalid && !modalCompo.{{'query'+parametroActualModal}}.$pristine || propiedadTipoQuery[parametroActualModal] == undefined"
+												class="help-block text-left">El query es requerido</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<br />
+												<div class="col-md-10 col-md-offset-1">
+													<button class="btn btn-danger"
+														ng-click="identificarParametros(propiedadTipoQuery, parametroActualModal)">Validar</button>
+												</div>
+											</div>
+										</div>
+										<div class="form-group"
+											ng-class="{'has-error': (modalCompo.{{'valParam'+parametroActualModal}}.$invalid && modalCompo.{{'valParam'+parametroActualModal}}.$dirty || propiedadTipoQuery['valParam'+parametroActualModal] == undefined) }"
+											ng-if="propiedadTipoQuery['verificacionQuery'+parametroActualModal]">
+											<div align="left">
+												<label>*Valor de Parámetro(separados por
+													{{esListaDoble['separador'+parametroActualModal]}})</label>
+											</div>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-info-circle"></i>
+												</div>
+												<input type="text" class="form-control"
+													name="{{'valParam'+parametroActualModal}}"
+													id="{{'valParam'+parametroActualModal}}"
+													ng-required="propiedadTipoQuery['verificacionQuery'+parametroActualModal]"
+													ng-model="propiedadTipoQuery['valParam'+parametroActualModal]" />
+												<span class="input-group-btn">
+													<button type="button"
+														class="btn btn-danger btn-flat btn-block"
+														ng-click="ejecutarQueryBusPrevia(propiedadTipoQuery,parametroActualModal, esListaDoble['separador'+parametroActualModal])">Ejecutar</button>
+												</span>
+											</div>
+											<div align="left"
+												ng-show="modalCompo.{{'valParam'+parametroActualModal}}.$error.required && modalCompo.{{'valParam'+parametroActualModal}}.$dirty || propiedadTipoQuery['valParam'+parametroActualModal] == undefined">
+												<span ng-style="{color:'red'}">El valor del parámetro
+													es requerido</span>
+											</div>
+										</div>
+										<div
+											ng-if="propiedadTipoQuery.testQuery != undefined && !propiedadTipoQuery.testQuery.stResult && propiedadTipoQuery.testQuery.mensaje != undefined"
+											class="col-md-offset-1 col-md-10 alert alert-teclo"
+											style="margin-bottom: 0">
+											<strong>ERROR: </strong>{{propiedadTipoQuery.testQuery.mensaje}}.
+										</div>
+										<div
+											ng-if="propiedadTipoQuery.testQuery != undefined && propiedadTipoQuery.testQuery.stResult && propiedadTipoQuery.testQuery.mensaje != undefined"
+											class="col-md-offset-1 col-md-10 alert alert-teclo-succes"
+											style="margin-bottom: 0">
+											<strong>La consulta se ejecutó correctamente.</strong>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!--configuración del componente de tipo swithcer-->
+		<div class="row" ng-if="listaCompPropModal.length <= 0">
+			<div class="col-xs-6 col-md-6">
+				<div class="form-group"
+					ng-class="{'has-error':modalCompo.{{'switchLabelUno'+parametroActualModal}}.$invalid && modalCompo.{{'switchLabelUno'+parametroActualModal}}.$dirty}">
+					<label><span class="asteriskReq">*</span>Texto Uno:</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="fa fa-barcode"></i>
+						</div>
+						<input class="form-control"
+							name="{{'switchLabelUno'+parametroActualModal}}"
+							ng-model="switcherProp['switchLabelUno'+parametroActualModal]"
+							required />
+					</div>
+					<span class="fadeInDown a-3ms help-block"
+						ng-show="modalCompo.{{'switchLabelUno'+parametroActualModal}}.$invalid && modalCompo.{{'switchLabelUno'+parametroActualModal}}.$dirty">
+						El label uno es requerida </span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-6">
+				<div class="form-group"
+					ng-class="{'has-error':modalCompo.{{'switchValueUno'+parametroActualModal}}.$invalid && modalCompo.{{'switchValueUno'+parametroActualModal}}.$dirty}">
+					<label><span class="asteriskReq">*</span>Valor Uno:</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="fa fa-barcode"></i>
+						</div>
+						<input class="form-control"
+							name="{{'switchValueUno'+parametroActualModal}}"
+							ng-model="switcherProp['switchValueUno'+parametroActualModal]"
+							required />
+					</div>
+					<span class="fadeInDown a-3ms help-block"
+						ng-show="modalCompo.{{'switchValueUno'+parametroActualModal}}.$invalid && modalCompo.{{'switchValueUno'+parametroActualModal}}.$dirty">
+						El valor uno es requerida </span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-6">
+				<div class="form-group"
+					ng-class="{'has-error':modalCompo.{{'switchLabelDos'+parametroActualModal}}.$invalid && modalCompo.{{'switchLabelDos'+parametroActualModal}}.$dirty}">
+					<label><span class="asteriskReq">*</span>Texto Dos:</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="fa fa-barcode"></i>
+						</div>
+						<input class="form-control"
+							name="{{'switchLabelDos'+parametroActualModal}}"
+							ng-model="switcherProp['switchLabelDos'+parametroActualModal]"
+							required />
+					</div>
+					<span class="fadeInDown a-3ms help-block"
+						ng-show="modalCompo.{{'switchLabelDos'+parametroActualModal}}.$invalid && modalCompo.{{'switchLabelDos'+parametroActualModal}}.$dirty">
+						El label dos es requerida </span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-6">
+				<div class="form-group"
+					ng-class="{'has-error':modalCompo.{{'switchValueDos'+parametroActualModal}}.$invalid && modalCompo.{{'switchValueDos'+parametroActualModal}}.$dirty}">
+					<label><span class="asteriskReq">*</span>Valor Dos:</label>
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="fa fa-barcode"></i>
+						</div>
+						<input class="form-control"
+							name="{{'switchValueDos'+parametroActualModal}}"
+							ng-model="switcherProp['switchValueDos'+parametroActualModal]"
+							required />
+					</div>
+					<span class="fadeInDown a-3ms help-block"
+						ng-show="modalCompo.{{'switchValueDos'+parametroActualModal}}.$invalid && modalCompo.{{'switchValueDos'+parametroActualModal}}.$dirty">
+						El valor dos es requerida </span>
+				</div>
+			</div>
+		</div>
+		</modal-body> <modal-footer>
+		<button class="btn btn-danger"
+			ng-click="checarSiHayCambio(parametroActualModal)">Cerrar</button>
+		<button class="btn btn-danger"
+			ng-click="guadaTmpPropCompo(parametroActualModal,propiedadTipoQuery,switcherProp)">Aplicar</button>
+		</modal-footer> </modal>
+	</form>
+
+
+
+	<form id="form" name="modalTipoCatalogo" novalidate role="form">
+		<modal visible="modalConfigTipoCat" size-modal="65%" noescape
+			modalstatic> <modal-header title="Parámetro Tipo Catálogo"
+			closeable="false"></modal-header> <modal-body>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<div align="center">
+								<h3 class="box-title">Catálogos</h3>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="col-md-12">
+								<table class="table table-hover header-fixed">
+									<tbody>
+										<tr
+											dir-paginate="r in catalogoTablas | itemsPerPage: view.rowsPerPage1"
+											pagination-id="pag1"
+											ng-click="setTablaSeleccionada(r.idTabla,objectCatalogosParam)"
+											ng-class="{'selected': r.idTabla === idTablaSeleccionada}">
+											<td style="cursor: pointer;"><label>{{r.nbAlias}}</label></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<div align="center">
+								<h3 class="box-title">Configuración</h3>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="col-md-12">
+								<div id="exTab1" ng-if="idTablaSeleccionada != undefined">
+									<ul class="nav nav-pills">
+										<li role="presentation" class="tabBox active"
+											ng-class="{'active border-box':b_identi}"><a id="identi"
+											name="identi" href="#1a" target="_self"
+											ng-click="activeNav($event)" data-toggle="tab">Identificador</a>
+										</li>
+										<li role="presentation" class="tabBox"
+											ng-class="{'active border-box':b_desc}"><a id="desc"
+											name="desc" href="#2a" target="_self"
+											ng-click="activeNav($event)" data-toggle="tab">Descripción</a>
+										</li>
+										<li role="presentation" class="tabBox"
+											ng-class="{'active border-box':b_rest}"><a id="rest"
+											name="rest" href="#3a" target="_self"
+											ng-click="activeNav($event)" data-toggle="tab">Restricciones</a>
+										</li>
+										<li role="presentation" class="tabBox"
+											ng-class="{'active border-box':b_order}"><a id="order"
+											name="order" href="#4a" target="_self"
+											ng-click="activeNav($event)" data-toggle="tab">Ordenamiento</a>
+										</li>
+									</ul>
+
+									<div class="tab-content clearfix">
+										<br />
+										<div class="tab-pane active" id="1a">
+											<div class="col-md-12">
+												<label>Identificador único de los elementos del
+													catálogo</label>
+												<hr class="separador" />
+											</div>
+											<div class="col-md-12">
+												<div class="row">
+													<div class="col-md-5">
+														<label>Columnas</label>
+													</div>
+												</div>
+												<div class="row" ng-repeat="r in objeto.iden">
+													<div class="radio">
+														<label> <input type="radio" value="{{r}}"
+															name="{{ 'iden' + r.idColumna }}"
+															id="{{ 'iden' + r.idColumna }}"
+															ng-model="catalogoConfigurado.identificador"
+															ng-checked="r.checked"> <span class="cr"><i
+																class="cr-icon glyphicon glyphicon-remove"></i></span>
+															{{r.nbAlias}}
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane" id="2a">
+											<div class="col-md-12">
+												<label>Descripción que será visible en los elementos
+													del catálogo</label>
+												<hr class="separador" />
+											</div>
+											<div class="col-md-12">
+												<div class="row">
+													<div class="col-md-5">
+														<label>Columnas</label>
+													</div>
+													<div class="col-md-4">
+														<label>Orden de descripción</label>
+													</div>
+												</div>
+												<div class="row" ng-repeat="d in objeto.desc">
+													<div class="col-md-5">
+														<div class="checkbox">
+															<label> <input type="checkbox"
+																name="{{ 'desc' + d.idColumna }}"
+																id="{{ 'desc' + d.idColumna }}" ng-model="d.check">
+																<span class="cr"><i
+																	class="cr-icon glyphicon glyphicon-ok"></i></span>
+																{{d.nbAlias}}
+															</label>
+														</div>
+													</div>
+													<div class="col-md-4"
+														ng-class="{ 'has-error' : modalTipoCatalogo.{{'desc'+d.idColumna}}.$invalid && !modalTipoCatalogo.{{'desc'+d.idColumna}}.$pristine }">
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-sort-numeric-asc"></i></span> <input type="number"
+																limit-to-max ng-model="d.nuOrden"
+																min="{{nuOrden.minAmbos}}"
+																max="{{nuOrden.maxNuOrdenColum}}"
+																name="{{ 'desc' + d.idColumna }}"
+																id="{{ 'desc' + d.idColumna }}" class="form-control"
+																ng-required="d.check" ng-disabled="!d.check">
+														</div>
+														<div
+															ng-show="modalTipoCatalogo.{{'desc'+d.idColumna}}.$invalid && !modalTipoCatalogo.{{'desc'+d.idColumna}}.$pristine"
+															class="help-block text-left">El orden es requerido</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane" id="3a">
+											<div class="col-md-12">
+												<label>Estás columnas fungirán como "WHERE" en la
+													consulta de valores</label>
+												<hr class="separador" />
+											</div>
+											<div class="col-md-12">
+												<div class="row">
+													<div class="col-md-4">
+														<label>Columnas</label>
+													</div>
+													<div class="col-md-4">
+														<label>Tipo de operador</label>
+													</div>
+													<div class="col-md-4">
+														<label>Valor de Restricción</label>
+													</div>
+												</div>
+												<div class="row" ng-repeat="r in objeto.restri">
+													<div class="col-md-4">
+														<div class="checkbox">
+															<label> <input type="checkbox"
+																name="{{ 'restri' + r.idColumna }}"
+																id="{{ 'restri' + r.idColumna }}" ng-model="r.check">
+																<span class="cr"><i
+																	class="cr-icon glyphicon glyphicon-ok"></i></span>
+																{{r.nbAlias}}
+															</label>
+														</div>
+													</div>
+													<div class="col-md-4"
+														ng-class="{ 'has-error' : modalTipoCatalogo.{{ 'tipoOperador' + r.idColumna }}.$invalid && !modalTipoCatalogo.{{ 'tipoOperador' + r.idColumna }}.$pristine }">
+														<div class="input-group">
+															<div class="input-group-addon">
+																<i class="fa fa-list-ul"></i>
+															</div>
+															<select class="form-control" select2
+																data-minimum-results-for-search="Infinity"
+																idioma-s2="{{currentLanguage}}"
+																ng-model="r.tipoOperador" ng-disabled="!r.check"
+																name="{{ 'tipoOperador' + r.idColumna }}"
+																id="{{ 'tipoOperador' + r.idColumna }}"
+																ng-required="r.check"
+																ng-change="shoAvisoTipoOperador(r.tipoOperador)"
+																ng-options="to as to.txValor for to in catTipoOperadores track by to.idTipoOperador">
+																<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+																	| translate}}</option>
+															</select>
+														</div>
+														<div
+															ng-show="modalTipoCatalogo.{{ 'tipoOperador' + r.idColumna }}.$invalid && !modalTipoCatalogo.{{ 'tipoOperador' + r.idColumna }}.$pristine"
+															class="help-block text-left">El tipo de operador es
+															requerido</div>
+													</div>
+													<div class="col-md-4"
+														ng-class="{ 'has-error' : modalTipoCatalogo.{{'value'+r.idColumna}}.$invalid && !modalTipoCatalogo.{{'value'+r.idColumna}}.$pristine }">
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-question-circle-o"></i></span> <input type="text"
+																ng-model="r.valor" name="{{ 'value' + r.idColumna }}"
+																id="{{ 'value' + r.idColumna }}" class="form-control"
+																ng-required="r.check && r.tipoOperador != undefined && r.tipoOperador.stValorRequerido == 1"
+																ng-disabled="!r.check || r.tipoOperador == undefined || r.tipoOperador.stValorRequerido == 0">
+														</div>
+														<div
+															ng-show="modalTipoCatalogo.{{'value'+r.idColumna}}.$invalid && !modalTipoCatalogo.{{'value'+r.idColumna}}.$pristine"
+															class="help-block text-left">El valor de
+															restricción es requerido</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane" id="4a">
+											<div class="col-md-12">
+												<label>Estás columnas fungirán como "ORDER" en la
+													consulta del catálogo</label>
+												<hr class="separador" />
+											</div>
+											<div class="col-md-12">
+												<div class="row">
+													<div class="col-md-4">
+														<label>Columnas</label>
+													</div>
+													<div class="col-md-4">
+														<label>Tipo de Ordanamiento</label>
+													</div>
+													<div class="col-md-4">
+														<label>Orden</label>
+													</div>
+												</div>
+												<div class="row" ng-repeat="r in objeto.order">
+													<div class="col-md-4">
+														<div class="checkbox">
+															<label> <input type="checkbox"
+																name="{{ 'order' + d.idColumna }}"
+																id="{{ 'order' + d.idColumna }}" ng-model="r.check">
+																<span class="cr"><i
+																	class="cr-icon glyphicon glyphicon-ok"></i></span>
+																{{r.nbAlias}}
+															</label>
+														</div>
+													</div>
+													<div class="col-md-4"
+														ng-class="{ 'has-error' : modalTipoCatalogo.{{ 'tipoOrdenamiento' + r.idColumna }}.$invalid && !modalTipoCatalogo.{{ 'tipoOrdenamiento' + r.idColumna }}.$pristine }">
+														<div class="input-group">
+															<div class="input-group-addon">
+																<i class="fa fa-list-ul"></i>
+															</div>
+															<select class="form-control" select2
+																data-minimum-results-for-search="Infinity"
+																idioma-s2="{{currentLanguage}}"
+																ng-model="r.tipoOrdenamiento" ng-disabled="!r.check"
+																name="{{ 'tipoOrdenamiento' + r.idColumna }}"
+																id="{{ 'tipoOrdenamiento' + r.idColumna }}"
+																ng-required="r.check"
+																ng-options="to.txValor as to.nbOrdenamiento for to in catTipoOrdenamiento">
+																<option value="">{{'APP.Base.mensaje.seleccioneOpcion'
+																	| translate}}</option>
+															</select>
+														</div>
+														<div
+															ng-show="modalTipoCatalogo.{{ 'tipoOrdenamiento' + r.idColumna }}.$invalid && !modalTipoCatalogo.{{ 'tipoOrdenamiento' + r.idColumna }}.$pristine"
+															class="help-block text-left">El tipo de
+															ordenamiento es requerido</div>
+													</div>
+													<div class="col-md-4"
+														ng-class="{ 'has-error' : modalTipoCatalogo.{{'order'+r.idColumna}}.$invalid && !modalTipoCatalogo.{{'order'+r.idColumna}}.$pristine }">
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-sort-numeric-asc"></i></span> <input type="number"
+																ng-model="r.nuOrden" name="{{ 'order' + r.idColumna }}"
+																id="{{ 'order' + r.idColumna }}" class="form-control"
+																ng-required="r.check && r.tipoOrdenamiento != undefined"
+																limit-to-max min="{{nuOrden.minAmbos}}"
+																max="{{nuOrden.maxNuOrdenColum}}"
+																ng-disabled="!r.check || r.tipoOrdenamiento == undefined">
+														</div>
+														<div
+															ng-show="modalTipoCatalogo.{{'order'+r.idColumna}}.$invalid && !modalTipoCatalogo.{{'order'+r.idColumna}}.$pristine"
+															class="help-block text-left">El orden es requerido</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<form>
+								</div>
+								<div ng-if="idTablaSeleccionada == undefined">
+									<label><span>Seleccione al menos un catálogo</span> </label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="box-footer">
+						<div class="row">
+							<div
+								ng-show="resultadoCatalogo[objectCatalogosParam.cdParametro] != undefined &&
+								 !resultadoCatalogo[objectCatalogosParam.cdParametro].stResult
+								 && resultadoCatalogo[objectCatalogosParam.cdParametro].mensaje != undefined"
+								class="col-md-offset-1 col-md-10 alert alert-teclo"
+								style="margin-bottom: 0">
+								<strong>ERROR: </strong>{{resultadoCatalogo[objectCatalogosParam.cdParametro].mensaje}}.
+							</div>
+							<div
+								ng-show="resultadoCatalogo[objectCatalogosParam.cdParametro] != undefined && 
+								resultadoCatalogo[objectCatalogosParam.cdParametro].stResult
+								&& resultadoCatalogo[objectCatalogosParam.cdParametro].mensaje != undefined"
+								class="col-md-offset-1 col-md-10 alert alert-teclo-succes"
+								style="margin-bottom: 0">
+								<strong>La consulta se ejecutó correctamente.</strong>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		</modal-body> <modal-footer>
+
+		<button class="btn btn-danger"
+			ng-click="comprobarParamTipCar(objectCatalogosParam)">Cerrar</button>
+
+		<button class="btn btn-danger"
+			ng-click="aplicarParamTipCat(idTablaSeleccionada,objeto,objectCatalogosParam)">Aplicar</button>
+		</modal-footer> </modal>
+	</form>
+
+	<form id="form" name="modalFormDependencia" novalidate role="form">
+		<modal visible="showModalDependencia" size-modal="65%" noescape
+			modalstatic> <modal-header
+			title="Configuración de Dependencias entre Catálogos"
+			closeable="false"></modal-header> <modal-body>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right">
+					<a class="btn btn-danger btn-sm"
+						ng-click="agregarElementoDependencia(parametrosDependientes.catInSelect)"
+						uib-tooltip="Añadir"> <!-- ng-disabled="parametrosDependientes.elementosDependientes.length >= parametrosDependientes.paramestrosTipoCatalogo.length - 1" -->
+						<i class="fa fa-plus fa-lg"></i>
+					</a><br /> <br />
+				</div>
+			</div>
+
+			<div class="col-md-12"
+				ng-repeat="(key, value) in parametrosDependientes.elementosDependientes">
+				<div class="pull-right">
+					<a class="btn btn-danger btn-sm"
+						ng-click="removerElementoDependencia(key, reportesTaqVO.dependenciasSelect)"
+						uib-tooltip="Remover"
+						ng-disabled="parametrosDependientes.elementosDependientes.length <= 1">
+						<i class="fa fa-trash-o fa-lg"></i>
+					</a><br /> <br />
+				</div>
+				<div class="col-md-5">
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border">
+							Catálogo Padre <span data-toggle="tooltip" data-placement="top"
+								data-html="true"
+								data-original-title="Al seleccionar el catálogo padre <br/>
+													se actualizarán los valores de los catalógos <br/>
+													que dependen de este">
+								<i class="fa fa-question-circle"></i>
+							</span>
+						</legend>
+						<br />
+						<div class="row">
+							<div class="form-group"
+								ng-class="{ 'has-error' : modalFormDependencia.{{ 'paramColumnPadre' + key }}.$invalid && !modalFormDependencia.{{ 'paramColumnPadre' + key }}.$pristine }">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-list-ul"></i>
+									</div>
+									<select class="form-control" select2
+										data-minimum-results-for-search="Infinity"
+										idioma-s2="{{currentLanguage}}"
+										ng-model="objectDependencias['paramPadre'+key]"
+										name="{{ 'paramColumnPadre' + key }}"
+										id="{{ 'paramColumnPadre' + key }}"
+										ng-change="changeSelectPadre(objectDependencias, key, parametrosDependientes.catInSelect)"
+										required
+										ng-options="to as to.txParametro for to in parametrosDependientes.catInSelect">
+										<!-- ng-options="to as to.txParametro for to in parametrosDependientes.listInSelect['listaPadre'+key]" 
+										parametrosDependientes.catInSelect
+										-->
+
+										<option value="">{{'APP.Base.mensaje.seleccioneOpcion'|translate}}</option>
+									</select>
+								</div>
+								<div
+									ng-show="modalFormDependencia.{{ 'paramColumnPadre' + key }}.$invalid && !modalFormDependencia.{{ 'paramColumnPadre' + key }}.$pristine"
+									class="help-block text-left">El parámetro padre es
+									requerido</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<table class="table table-hover header-fixed">
+								<tbody>
+									<tr
+										dir-paginate="r in objectDependencias['paramPadreColumns'+key] | itemsPerPage: view.rowsPerPage1"
+										pagination-id="pag1" ng-click="setParamPadre(r, key)"
+										ng-class="{'selected': r.idColumna == modeloAsociaciones['idPadreSelect'+key].idColumna}">
+										<td style="cursor: pointer;"><label>{{r.nbAlias}}</label></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</fieldset>
+				</div>
+				<div class="col-md-5">
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border">
+							Catálogo Hijo<span data-toggle="tooltip" data-placement="top"
+								data-html="true"
+								data-original-title="Lo valores del catálogo hijo se <br/>
+													se actualizarán cuando cambien los<br/>
+													catálogos padre de los que depende">
+								<i class="fa fa-question-circle"></i>
+							</span>
+						</legend>
+						<br />
+						<div class="row">
+							<div class="form-group"
+								ng-class="{ 'has-error' : modalFormDependencia.{{ 'paramColumnHijo' + key }}.$invalid && !modalFormDependencia.{{ 'paramColumnHijo' + key }}.$pristine }">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-list-ul"></i>
+									</div>
+									<select class="form-control" select2
+										data-minimum-results-for-search="Infinity"
+										ng-disabled="objectDependencias['paramPadre'+key] == undefined"
+										idioma-s2="{{currentLanguage}}"
+										ng-model="objectDependencias['paramHijo'+key]"
+										name="{{ 'paramColumnHijo' + key }}"
+										id="{{ 'paramColumnHijo' + key }}" required
+										ng-change="changeSelectHijo(objectDependencias,key)"
+										ng-options="to as to.txParametro for to in parametrosDependientes.catInSelect">
+										<option value="">{{'APP.Base.mensaje.seleccioneOpcion'|translate}}</option>
+									</select>
+									<!--
+									ng-options="to as to.txParametro for to in parametrosDependientes.listInSelect['listaHijo'+key]"
+									parametrosDependientes.catInSelect 
+									 -->
+								</div>
+								<div
+									ng-show="modalFormDependencia.{{ 'paramColumnHijo' + key }}.$invalid && !modalFormDependencia.{{ 'paramColumnHijo' + key }}.$pristine"
+									class="help-block text-left">El parámetro hijo es
+									requerido</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<table class="table table-hover header-fixed">
+								<tbody>
+									<tr
+										dir-paginate="r in objectDependencias['paramHijoColumns'+key] | itemsPerPage: view.rowsPerPage2"
+										pagination-id="pag2" ng-click="setParamHijo(r, key)"
+										ng-class="{'selected': r.idColumna == modeloAsociaciones['idHijoSelect'+key].idColumna}">
+										<td style="cursor: pointer;"><label>{{r.nbAlias}}</label></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+		</modal-body> <modal-footer>
+
+		<button class="btn btn-danger"
+			ng-click="resetearContenidoDependencia(parametrosDependientes.elementosDependientes, reportesTaqVO.dependenciasSelect, parametrosDependientes.catInSelect)">Resetear</button>
+
+		<button class="btn btn-danger"
+			ng-click="cerarModalConfigDependencia(parametrosDependientes.elementosDependientes,reportesTaqVO.dependenciasSelect)">Cerrar</button>
+
+		<button class="btn btn-danger"
+			ng-click="aplicarConfiguracionDependencia(parametrosDependientes.elementosDependientes)">Aplicar</button>
+		</modal-footer> </modal>
+	</form>
+
+
+</body>
+</html>

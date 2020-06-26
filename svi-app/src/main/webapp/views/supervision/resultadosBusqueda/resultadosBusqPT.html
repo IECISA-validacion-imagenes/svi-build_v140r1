@@ -1,0 +1,92 @@
+<div class="row" ng-if="dataRegistros.length >0 && tipoBusq.valor == 1">
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header row">
+                    <div class="col-md-6 col-xs-12">
+                        <h3 class="box-title">Resultados encontrados: {{
+                            (dataRegistros | filter : view.searchSomething).length }}</h3>
+                    </div>
+                    <div class="col-md-offset-3 col-md-3 col-xs-10">
+                        <div class="input-group pull-right">
+                            <input type="text" id="searchsomething" class="form-control"
+                                placeholder="Buscar por filtro" ng-model="view.searchSomething">
+                            <div class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body table-responsive">
+                    <table id="tblAsignacionesLote" class="table table-striped table-hover header-fixed">
+                        <thead>
+                            <tr>
+                                <th align="center" sort order="'nbEntrega'" by="order" reverse="reverse">ENTREGA
+                                </th>
+                                <th align="center" sort order="'nbPtLote'" by="order" reverse="reverse">PUNTO
+                                    T&Aacute;CTICO</th>
+                                <th align="center" sort order="'nuCsv'" by="order" reverse="reverse">CANTIDAD CSV
+                                </th>
+                                <th align="center" sort order="'nuValidados'" by="order" reverse="reverse">CSV
+                                    VALIDADOS</th>
+                                <th align="center" sort order="'nuFaltantes'" by="order" reverse="reverse">CSV
+                                    FALTANTES</th>
+                                <th align="center" sort order="'nuFaltantes'" by="order" reverse="reverse">TOTAL
+                                    COINCIDENCIAS</th>
+                                <th align="center" sort order="'totalMarcados'" by="order" reverse="reverse">TOTAL
+                                    MARCADOS</th>
+                                <th align="center">ESTATUS</th>
+                                <th align="center">ACCI&Oacute;N</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="csv in dataRegistros | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage"
+                                pagination-id="consultaIncidencia">
+                                <td class="center">{{ csv.nbEntrega }}</td>
+                                <td class="center">
+                                    <a ng-if="csv.nbEstado==estatus.pendiente&&csv.totalCsvsFaltantes==0||csv.nbEstado==estatus.revalidado" 
+                                    style="color:rgba(0, 0, 0, 0.90)" ng-click="verDetalle(csv.idPtLote, null)">{{ csv.nbPtLote}}</a>
+                                    <label ng-if="csv.nbEstado!=estatus.pendiente||csv.nbEstado==estatus.pendiente&&csv.totalCsvsFaltantes!=0" style="color:rgba(0, 0, 0, 0.55)" >{{ csv.nbPtLote}}</label>
+                                </td>
+                                <td class="center">{{ csv.totalCsvs}}</td>
+                                <td class="center">{{ csv.totalCsvsValidados }}</td>
+                                <td class="center">{{ csv.totalCsvsFaltantes }}</td>
+                                <td class="center">{{ csv.totalRegistros }}</td>
+                                <td class="center">{{ csv.totalMarcados }}</td>
+                                <td class="center">
+                                        <span ng-if="csv.nbEstado==estatus.validado" class="label label-success"> Validado</span>
+                                        <span ng-if="csv.nbEstado==estatus.pendiente" class="label label-warning"> Pendiente</span>
+                                        <span ng-if="csv.nbEstado==estatus.inactivo" class="label" style="background-color:grey"> Inactivo</span>
+                                        <span ng-if="csv.nbEstado==estatus.revalidado" class="label" style="background-color:blue"> Revalidado</span>
+                                        <span ng-if="csv.nbEstado==estatus.reasignado" class="label" style="background-color:rgb(23, 199, 170)"> Reasignado</span>
+                                    </td>
+                                <td class="center">
+                                        <a ng-if="csv.nbEstado==estatus.pendiente&&csv.totalCsvsFaltantes==0||csv.nbEstado==estatus.revalidado" class="fa fa-search fa-2x" ng-click="revalidacionRapida(csv.idPtLote,revalidacionRapida.pt)"
+                                            data-toggle="tooltip" data-placement="left" title="Revalidaci&oacute;n"></a>
+                                        <a ng-if="csv.nbEstado==estatus.pendiente&&csv.totalCsvsFaltantes==0||csv.nbEstado==estatus.revalidado" class="fa fa-check-square fa-2x" ng-click="marcarPTValidado(csv.idPtLote)"
+                                            data-toggle="tooltip" data-placement="left"
+                                            title="Confirmar Validaci&oacute;n"></a>
+                                    </td>
+                            </tr>
+                            <tr ng-if="(dataRegistros | filter:view.searchSomething).length < 1">
+                                <td colspan="10" class="text-center">
+                                    <h4>No se
+                                        encontraron coincidencias</h4>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="fixed-table-pagination" style="display: block;">
+                        <rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="dataRegistros">
+                        </rows-per-page>
+                        <div class="pull-right pagination">
+                            <dir-pagination-controls class="pagination" pagination-id="consultaIncidencia">
+                            </dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

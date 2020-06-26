@@ -1,0 +1,108 @@
+.imagenVehicle img{
+	margin:0.5em;
+	width: 100%;
+}
+.imagenVehicle img{
+	width:100%;
+	height:70px;
+}
+.containersDataDesign{
+	background-color:blue;
+	height:660px;
+}
+.boxbody-height {
+	height: 45rem;
+}
+
+.boxheader-height {
+	height: 4rem;
+}
+
+.boxheader-inline {
+	text-align: center;
+	margin: auto;
+	justify-content: space-between;
+}
+
+.containersDataDesign2{
+	height:440px;
+	/*overflow-y: hidden;
+	overflow-x: hidden;*/
+	padding-bottom:100px;
+}
+.btn-left-right{
+	font-weight: bold;
+	font-size: 2em;
+}
+.inputsValidacionImagen{
+/* 	font-size:13px; */
+}
+.hand-cursor{
+	cursor: pointer;
+}
+
+/***********************/
+* {box-sizing: border-box;}
+
+.img-magnifier-container {
+  width: 100%;
+  height: 470px;
+}
+
+.img-magnifier-glass {
+  position: absolute;
+  border: 1px solid #000;
+  border-radius: 20%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 100px;
+  height: 100px;
+}
+.test{
+	background-color: rgba(71, 212, 170, 0.9);
+}
+.currentActive{
+	background-color: rgba(182, 217, 255, 0.8);
+}
+
+.titleimg{
+	font-weight: bold;
+	text-align: center;
+}
+
+.scroll-left{
+	overflow: scroll;
+}
+.sizefixed{
+	width:200px	
+}
+.modalExtraLarge{
+	width:100%;
+}
+
+input:focus { 
+	border: 1px solid rgba(255, 54, 62, 0.5);
+}
+.formvalidaregistroclass .form-control:focus{
+	border: 1px solid rgba(255, 54, 62, 0.8);
+}
+.formvalidaregistroclass .select2-container--open,
+.formvalidaregistroclass .select2-container--focus,
+.formvalidaregistroclass .select2-container:focus{
+	outline: initial;
+	border: 1px solid rgba(255, 54, 62, 0.8) !important;
+}
+.formvalidaregistroclass .btn.btn-danger:focus {
+	box-shadow: 1px 2px 15px rgba(0, 0, 0, .5);
+}
+.listgroupex{
+	max-height: 270px;
+	background-color: none;
+	overflow-y: scroll;
+	border: 2px rgba(0,0,0,3);
+}
+.pull-left-custom{
+	text-align: left;
+	position: relative;
+	left: 1rem;
+}

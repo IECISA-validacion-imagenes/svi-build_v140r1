@@ -1,0 +1,45 @@
+[
+    {
+        "idBoleta":67,
+        "nombreBoleta" :"QRW67978",
+        "numfolio":10000003,
+        "fhBoleta":1549811131000,
+        "placaOficial":"6700AMZLET"
+    },
+    {
+        "idBoleta":68,
+        "nombreBoleta" :"QRW67978",
+        "numfolio":10000004,
+        "fhBoleta":1549811131000,
+        "placaOficial":"6700AMZLET"
+    },
+    {
+        "idBoleta":34,
+        "nombreBoleta" :"QRW67978",
+        "numfolio":10000005,
+        "fhBoleta": 1549811131000,
+        "placaOficial":"6700AMZLET"
+    },
+    {
+        "idBoleta":36,
+        "nombreBoleta" :"JRW67978",
+        "numfolio":10000006,
+        "fhBoleta": 1549811131000 ,
+        "placaOficial":"6700AMZLET"
+    },
+    {
+        "idBoleta":39,
+        "nombreBoleta" :"LRW67978",
+        "numfolio":10000007,
+        "fhBoleta": 1549811131000 ,
+        "placaOficial":"6700AMZLET"
+    },
+    {
+        "idBoleta":40,
+        "nombreBoleta" :"LRW68958",
+        "numfolio":10000007,
+        "fhBoleta": 1549811131000 ,
+        "placaOficial":"6700AMZLEGR"
+    }
+        
+]

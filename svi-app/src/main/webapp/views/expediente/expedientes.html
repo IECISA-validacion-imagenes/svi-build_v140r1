@@ -1,0 +1,337 @@
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>Consulta de Expedientes</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Expedientes</a></li>
+			<li class="active">Consulta de Expedientes</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="box box-danger" ng-class="{'collapsed-box':!isOpen}">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Par&aacute;metros de b&uacute;squeda</h3>
+						<div class="box-tools pull-right">
+							<button id="x" type="button" class="btn btn-box-tool"
+								data-widget="collapse" ng-click="isOpen = !isOpen">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<form role="form" name="formConsultaExpediente"
+							ng-submit="buscarExpedientes()"
+							novalidate>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': formConsultaExpediente.comboPeriodoIncidencia.$error.required && formConsultaExpediente.comboPeriodoIncidencia.$dirty}">
+										<label for="comboPeriodoIncidencia">Entrega:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<select class="form-control" id="comboPeriodoIncidencia"
+												name="comboPeriodoIncidencia" select-picker multiple
+												idioma-sp="{{currentLanguage}}" data-actions-box="true"
+												data-selected-text-format="count > 2"
+												data-actions-box="true" data-live-search="true"
+												data-live-search-placeholder="Buscar..."
+												ng-model="catPeriodo.valor"
+												ng-options='a.nameCat for a in catPeriodo.lista'
+												ng-change="filtrarEntregas()">
+											</select>
+										</div>
+										<div
+											ng-show="formConsultaExpediente.comboPeriodoIncidencia.$error.required && formConsultaExpediente.comboPeriodoIncidencia.$dirty"
+											ng-style="{color:'red'}">La entrega es requerida</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': formConsultaExpediente.comboBusqPTIncidencia.$error.required && formConsultaExpediente.comboBusqPTIncidencia.$dirty}">
+										<label for="comboBusqPTIncidencia">Punto Táctico:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<select class="form-control" id="comboBusqPTIncidencia"
+												name="comboBusqPTIncidencia" select-picker multiple
+												idioma-sp="{{currentLanguage}}" data-actions-box="true"
+												data-selected-text-format="count > 2"
+												data-actions-box="true" data-live-search="true"
+												data-live-search-placeholder="Buscar..."
+												ng-model="catBusqPT.valor"
+												ng-options='a.nbNombre group by a.nbEntrega for a in catBusqPT.lista'
+												ng-change="filtrarPuntosTacticos()">
+											</select>
+										</div>
+										<div
+											ng-show="formConsultaExpediente.comboBusqPTIncidencia.$error.required && formConsultaExpediente.comboBusqPTIncidencia.$dirty"
+											ng-style="{color:'red'}">Debe de seleccionar al menos
+											un valor</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': formConsultaExpediente.comboBusqCSVIncidencia.$error.required && formConsultaExpediente.comboBusqCSVIncidencia.$dirty}">
+										<label for="comboBusqCSVIncidencia">CSV:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<select class="form-control" id="comboBusqCSVIncidencia"
+												name="comboBusqCSVIncidencia" select-picker multiple
+												idioma-sp="{{currentLanguage}}" data-actions-box="true"
+												data-selected-text-format="count > 2"
+												data-actions-box="true" data-live-search="true"
+												data-live-search-placeholder="Buscar..."
+												ng-model="catBusqCSV.valor"
+												ng-options='a.nbNombre group by a.nbPt for a in catBusqCSV.lista'
+												ng-change="filtrarSubMarcasPorPerfil()">
+											</select>
+										</div>
+										<div
+											ng-show="formConsultaExpediente.comboBusqCSVIncidencia.$error.required && formConsultaExpediente.comboBusqCSVIncidencia.$dirty"
+											ng-style="{color:'red'}">Debe de seleccionar al menos
+											un valor</div>
+									</div>
+								</div>
+							</div>
+							
+						
+							<!-- Marca, submarca, perfil -->
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': formConsultaExpediente.comboMarca.$error.required && formConsultaExpediente.comboMarca.$dirty}">
+										<label for="comboPeriodoIncidencia">Marca:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<select class="form-control" id="comboMarca"
+												name="comboMarca" select-picker multiple
+												idioma-sp="{{currentLanguage}}" data-actions-box="true"
+												data-selected-text-format="count > 2"
+												data-actions-box="true" data-live-search="true"
+												data-live-search-placeholder="Buscar..."
+												ng-model="catBusqMarca.valor"
+												ng-options='cat.txMarca for cat in catBusqMarca.lista'
+												ng-change="filtrarMarcas()">
+											</select>
+										</div>
+										<div
+											ng-show="formConsultaExpediente.comboMarca.$error.required && formConsultaExpediente.comboMarca.$dirty"
+											ng-style="{color:'red'}">La marca es requerida</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': formConsultaExpediente.comboSubMarca.$error.required && formConsultaExpediente.comboSubMarca.$dirty}">
+										<label for="comboSubMarca">Submarca:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<select class="form-control" id="comboSubMarca"
+												name="comboSubMarca" select-picker multiple
+												idioma-sp="{{currentLanguage}}" data-actions-box="true"
+												data-selected-text-format="count > 2"
+												data-actions-box="true" data-live-search="true"
+												data-live-search-placeholder="Buscar..."
+												ng-model="catBusqSubMarca.valor"
+												ng-options="cat.txSubMarca group by cat.txMarca for cat in catBusqSubMarca.lista"
+												ng-change="filtrarSubMarcas()">
+											</select>
+										</div>
+										<div
+											ng-show="formConsultaExpediente.comboSubMarca.$error.required && formConsultaExpediente.comboSubMarca.$dirty"
+											ng-style="{color:'red'}">Debe de seleccionar al menos un valor</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': formConsultaExpediente.comboPerfil.$error.required && formConsultaExpediente.comboPerfil.$dirty}">
+										<label for="comboPerfil">Perfil:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<select class="form-control" id="comboPerfil"
+												name="comboPerfil" select-picker multiple
+												idioma-sp="{{currentLanguage}}" data-actions-box="true"
+												data-selected-text-format="count > 2"
+												data-actions-box="true" data-live-search="true"
+												data-live-search-placeholder="Buscar..."
+												ng-model="catBusqPerfil.valor"
+												ng-options="cat.txPerfil for cat in catBusqPerfil.lista">
+											</select>
+										</div>
+										<div
+											ng-show="formConsultaExpediente.comboPerfi.$error.required && formConsultaExpediente.comboPerfi.$dirty"
+											ng-style="{color:'red'}">Debe de seleccionar al menos un valor</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="placa">Incidencia:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<select class="form-control" id="tipoIncidencia"
+												name="tipoIncidencia" select-picker multiple
+												data-actions-box="true"
+												data-selected-text-format="count > 2" 
+												idioma-s2="{{currentLanguage}}"
+												ng-required="false"
+												ng-options="cat.txIncidencia for cat in catIncidencia.lista"
+												ng-model="catIncidencia.valor">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="placa">Placa:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input capitalize type="text" class="form-control" id="placaCSVIncidencia"
+												name="placaCSVIncidencia"
+												data-actions-box="true"
+												ng-model="cdPlaca" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="placa">N&uacute;mero de Expediente:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input capitalize type="text" class="form-control" id="noExpedienteCSVIncidencia"
+												name="noExpedienteCSVIncidencia"
+												data-actions-box="true"
+												ng-model="nuExpediente" />
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-12 center">
+									<button class="btn btn-danger pull-right"
+										ng-click="limpiarFomulario($event)">
+										<text tooltip="Restaurar"> <i class="fa fa-undo"></i></text>
+									</button>
+
+									<button type="submit" class="btn btn-danger btn-flat">{{
+										'APP.Base.boton.buscar' |translate}}</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" ng-show="dataRegistros.length > 0">
+			<div class="col-md-12">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Lista de Expedientes</h3>
+						<div class="box-tools pull-right">
+							<button id="x1" type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
+					<div id="expEncontrados" class="box-body">
+						<div class="col-md-4">
+							<h4 class="box-title">Registros encontrados:
+								{{(dataRegistros | filter : view.searchSomething).length |
+								number}}</h4>
+						</div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="input-group">
+								<input id="searchSomething" type="text" class="form-control"
+									placeholder="Buscar por filtro" ng-model="view.searchSomething">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<table id="tabla_imagenes"
+								class="table table-hover header-fixed table-responsive">
+								<thead>
+									<tr>
+										<th class="text-center" width="20%">N&Uacute;M.
+											EXPEDIENTE</th>
+										<th class="text-center" width="8%">ENTREGA</th>
+										<th class="text-center" width="8%">PUNTO T&Aacute;CTICO</th>
+										<th class="text-center" width="9%">ARCHIVO</th>
+										<th class="text-center" width="8%">PLACA DELANTERA</th>
+										<th class="text-center" width="8%">ENTIDAD DELANTERA</th>
+										<th class="text-center" width="8%">PLACA TRASERA</th>
+										<th class="text-center" width="8%">ENTIDAD TRASERA</th>
+										<th class="text-center" width="8%">ESTADO</th>
+										<th class="text-center" width="8%">VALIDACIONES</th>
+										
+									</tr>
+								</thead>
+								<tbody>
+									<tr										
+										dir-paginate="val in dataRegistros | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage"
+										ng-click="verDetalle(val,$event)" class="clickable-row hand-cursor">
+										<td class="text-center" width="20%">{{val.nuExpediente}}</td>
+										<td class="text-center" width="8%">{{val.nbEntrega}}</td>
+										<td class="text-center" width="8%">{{val.nbPtLote}}</td>
+										<td class="text-center" width="9%">{{val.nbArchivoCsv}}</td>
+										<td class="text-center" width="8%">{{val.cdPlacaDelantera}}</td>
+										<td class="text-center" width="8%">{{val.cdEntidadDelantera}}</td>
+										<td class="text-center" width="8%">{{val.cdPlacaTrasera}}</td>
+										<td class="text-center" width="8%">{{val.cdEntidadTrasera}}</td>
+										<td class="text-center" width="8%">{{val.nbEstado}}</td>
+										<td class="text-center" width="8%">{{val.validaciones}}</td>										
+									</tr>
+									<tr
+										ng-if="(dataRegistros | filter:view.searchSomething).length < 1">
+										<td colspan="8" class="text-center"><h4>No se
+												encontraron coincidencias</h4></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display: block;">
+								<rows-per-page rows="view.rowsPerPage"
+									filtro="view.searchSomething" array="dataRegistros"></rows-per-page>
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
